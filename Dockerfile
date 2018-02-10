@@ -30,6 +30,7 @@ RUN rm -r /srv/shiny-server/*
 RUN mkdir -p /srv/shiny-server/
 COPY . /srv/shiny-server/
 
+RUN echo "hello"
 RUN sudo su - -c "R -e \"devtools::install_github('explodecomputer/USSpensions')\"" 
 
 EXPOSE 3838
