@@ -12,9 +12,9 @@ version=`cat version.txt | cut -d " " -f 1`
 echo "version: $version"
 
 # run build
-docker build -t USSpensions-shiny:latest .
+docker build -t usspensions-shiny:latest .
 
 # run container
-docker stop USSpensions-shiny || true
-docker rm USSpensions-shiny || true
-docker run -d --name USSpensions-shiny -p 8011:3838 --restart=always USSpensions-shiny:latest
+docker stop usspensions-shiny || true
+docker rm usspensions-shiny || true
+docker run -d --name usspensions-shiny -p 8011:3838 --restart=always usspensions-shiny:latest
