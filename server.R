@@ -4,8 +4,8 @@ server <- function(input, output)
 {
 	benefits <- reactive({
 		pension_calculation(
-			income=income_projection(input$input_income, input$input_payinc, years=68, upper_limit=input$input_maxpay), 
-			annuity=annuity_rates(input$input_sex, input$input_spouse, 68),
+			income=income_projection(input$input_income, input$input_payinc / 100, years=68, upper_limit=input$input_maxpay), 
+			annuity=annuity_rates(sex=input$input_sex, type=input$input_spouse, years=68, le_increase=input$input_lei / 100),
 			employee_cont=input$input_employeecont / 100, 
 			employer_cont=input$input_employercont / 100, 
 			prudence = as.numeric(input$input_invprudence), 
@@ -24,13 +24,13 @@ server <- function(input, output)
 	output$db_income_perc <- renderValueBox({
 		valueBox(
 			paste0(round(
-				(benefits()$dc_pension - benefits()$db_pension) / benefits()$dc_pension * 100), "%"), 
+				(benefits()$dc_pension - benefits()$db_pension) / benefits()$db_pension * 100), "%"), 
 			"Change compared to DB (current)", icon=icon("cogs"), color="red")
 	})
 
 	output$tps_income_perc <- renderValueBox({
 		valueBox(paste0(round(
-				(benefits()$dc_pension - benefits()$tps_pension) / benefits()$dc_pension * 100), "%"), "Comparison with Teachers Pension Scheme", icon=icon("cogs"), color="yellow")
+				(benefits()$dc_pension - benefits()$tps_pension) / benefits()$tps_pension * 100), "%"), "Comparison with Teachers Pension Scheme", icon=icon("cogs"), color="yellow")
 
 	})
 
@@ -42,13 +42,13 @@ server <- function(input, output)
 	output$db_pot_perc <- renderValueBox({
 		valueBox(
 			paste0(round(
-				(benefits()$dc_pot - benefits()$db_pot) / benefits()$dc_pot * 100), "%"), 
+				(benefits()$dc_pot - benefits()$db_pot) / benefits()$db_pot * 100), "%"), 
 			"Change compared to DB (current)", icon=icon("cogs"), color="red")
 	})
 
 	output$tps_pot_perc <- renderValueBox({
 		valueBox(paste0(round(
-				(benefits()$dc_pot - benefits()$tps_pot) / benefits()$dc_pot * 100), "%"), "Comparison with Teachers Pension Scheme", icon=icon("cogs"), color="yellow")
+				(benefits()$dc_pot - benefits()$tps_pot) / benefits()$tps_pot * 100), "%"), "Comparison with Teachers Pension Scheme", icon=icon("cogs"), color="yellow")
 
 	})
 
