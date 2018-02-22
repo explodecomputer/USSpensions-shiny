@@ -184,6 +184,10 @@ dashboardPage(
 		)
 	),
 	dashboardBody(
+		tags$head(
+			includeScript("https://www.googletagmanager.com/gtag/js?id=UA-53610054-2"),
+			includeScript("google-analytics.js")
+		),
 		tabItems(
 			dashboard_tab(),
 			about_tab()
