@@ -6,18 +6,23 @@ dashboard_tab <- function()
 {
 	tabItem(tabName = "dashboard", fluidRow(
 		column(width=5,
+			fluidRow(box(width=12,
+				p("This is a simple web app that estimates the impact of the USS's proposed changes to the pension scheme."),
+				p("The estimates or for future earnings only (i.e. benefits already accrued will not be affected)"),
+				p(""))
+			),
 			fluidRow(box(title="Your details", width=12,
 				column(width=4,
-					numericInput("input_income", "Income (£):", 43600, min=0, max=1000000)
+					numericInput("input_income", "Income (£):", 35000, min=0, max=1000000)
 				),
 				column(width=4,
 					dateInput("input_dob", "Date of birth:", value="1984-09-06")
 				),
 				column(width=2,
-					radioButtons("input_sex", "Sex:", c("Male"="men", "Female"="women"))
+					radioButtons("input_sex", "Sex:", c("Female"="women", "Male"="men"))
 				),
 				column(width=2,
-					radioButtons("input_spouse", "Spouse:", c("Yes"="joint", "No"="single"))
+					radioButtons("input_spouse", "Spouse:", c("No"="single", "Yes"="joint"))
 				)
 			)),
 			fluidRow(box(title="Technical assumptions", width=12,
@@ -36,7 +41,7 @@ dashboard_tab <- function()
 						numericInput("input_employeecont", "Employee contribution (%)", 8.00, min=0, max=100)
 					),
 					column(width=6,
-						numericInput("input_employercont", "Employer contribution (%)", 13.25, min=0, max=100)
+						numericInput("input_employercont", "Employer contribution (%)", 12, min=0, max=100)
 					)
 				)
 			)),
@@ -60,10 +65,10 @@ dashboard_tab <- function()
 			tags$hr(),
 			fluidRow(
 				column(width=4,
-					fluidRow(valueBoxOutput("dc_income", width=12))
+					fluidRow(valueBoxOutput("db_income", width=12))
 				),
 				column(width=4,
-					fluidRow(valueBoxOutput("db_income", width=12)),
+					fluidRow(valueBoxOutput("dc_income", width=12)),
 					fluidRow(valueBoxOutput("db_income_perc", width=12))
 				),
 				column(width=4,
@@ -74,10 +79,10 @@ dashboard_tab <- function()
 			tags$hr(),
 			fluidRow(
 				column(width=4,
-					fluidRow(valueBoxOutput("dc_pot", width=12))
+					fluidRow(valueBoxOutput("db_pot", width=12))
 				),
 				column(width=4,
-					fluidRow(valueBoxOutput("db_pot", width=12)),
+					fluidRow(valueBoxOutput("dc_pot", width=12)),
 					fluidRow(valueBoxOutput("db_pot_perc", width=12))
 				),
 				column(width=4,
@@ -97,19 +102,23 @@ about_tab <- function()
 			fluidRow(box(width=12,
 				title="About",
 				p("The USS pension scheme has proposed a change from the defined benefits (DB) model to the defined contributions (DC) model."),
-				p("This app provides some projections that shows the likely impact on future performance for these different models. It also provides the results for the Post 92 Teacher Pension Scheme for comparison.")
+				p("This app provides some projections that shows the likely impact on future performance for these different models. It also provides the results for the Post 92 Teacher Pension Scheme (TPS) for comparison."),
+				p(strong("Pension values that have already accumulated are not going to be affected")),
+				p(strong("Only future pension benefits will be affected. This modeller only shows the impact on future earnings"))
 			)),
 			fluidRow(box(width=12,
 				title="Disclaimer",
-				p("This modeller provides a forecast of the pensions we can expect to receive under the current defined benefit scheme and the UUK proposed defined contribution scheme. I am not an actuary, accountant or a financial advisor. This is for information only and should not be used for personal financial decisions. Before making any decisions about your pension you should seek professional advice.")
+				p("This modeller provides a forecast of the pensions we can expect to receive under the current defined benefit scheme and the UUK proposed defined contribution scheme. We are not actuaries, accountants or financial advisors. This is for information only and should not be used for personal financial decisions. Before making any decisions about your pension you should seek professional advice.")
 			)),
 			fluidRow(box(width=12,title="Contact",
-				p("Model developed by Neil Davies", tags$a("neil.davies@bristol.ac.uk", href="mailto:neil.davies@bristol.ac.uk")),
-				p("Let me know if this modeller can be improved in any way."),
+				p("Model and website developed by Neil Davies", tags$a("neil.davies@bristol.ac.uk", href="mailto:neil.davies@bristol.ac.uk"), " and Gibran Hemani", tags$a("g.hemani@bristol.ac.uk", href="mailto:g.hemani@bristol.ac.uk")),
+				p("Please let us know if this modeller can be improved in any way.")
+			)),
+			fluidRow(box(width=12,title="Source code",
 				p("All code is open source under the GPL-3 license, and can be found here:"),
 				p(tags$a("github.com/explodecomputer/USSpensions", href="https://github.com/explodecomputer/USSpensions")),
-				p(tags$a("github.com/explodecomputer/USSpensions-shiny", href="https://github.com/explodecomputer/USSpensions-shiny"))
-
+				p(tags$a("github.com/explodecomputer/USSpensions-shiny", href="https://github.com/explodecomputer/USSpensions-shiny")),
+				p("The calculations are based on the values in the spreadsheet found ", tags$a("here", href="https://drive.google.com/file/d/1Vw8STiJ64BoUxf8PKdATGwmyxcFFBYbG/view"))
 			))
 		),
 		column(width=6,
