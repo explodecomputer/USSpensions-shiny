@@ -28,11 +28,20 @@ server <- function(input, output)
 			"Proposed change (comparing DC to DB)", icon=icon("cogs"), color="red")
 	})
 
+	output$db_income_diff <- renderValueBox({
+		valueBox(
+			paste0("£", round(benefits()$dc_pension - benefits()$db_pension)), 
+			"Proposed change (comparing DC to DB)", icon=icon("cogs"), color="red")
+	})
+
 	output$tps_income_perc <- renderValueBox({
 		valueBox(paste0(round(
 				(benefits()$db_pension - benefits()$tps_pension) / benefits()$tps_pension * 100), "%"), "Comparison with TPS (DB vs TPS)", icon=icon("cogs"), color="yellow")
 	})
 
+	output$tps_income_diff <- renderValueBox({
+		valueBox(paste0("£", round(benefits()$db_pension - benefits()$tps_pension)), "Comparison with TPS (DB vs TPS)", icon=icon("cogs"), color="yellow")
+	})
 
 	output$dc_pot <- renderValueBox({
 		valueBox(paste0("£", round(benefits()$dc_pot)), "DC total pension value (proposed)", icon=icon("list"), color="red")
@@ -45,11 +54,21 @@ server <- function(input, output)
 			"Proposed change (comparing DC to DB)", icon=icon("cogs"), color="red")
 	})
 
+	output$db_pot_diff <- renderValueBox({
+		valueBox(paste0("£", round(benefits()$dc_pot - benefits()$db_pot)), 
+			"Proposed change (comparing DC to DB)", icon=icon("cogs"), color="red")
+	})
+
 	output$tps_pot_perc <- renderValueBox({
 		valueBox(paste0(round(
 				(benefits()$db_pot - benefits()$tps_pot) / benefits()$tps_pot * 100), "%"), "Comparison with TPS (DB vs TPS)", icon=icon("cogs"), color="yellow")
+	})
+
+	output$tps_pot_diff <- renderValueBox({
+		valueBox(paste0("£", round(benefits()$db_pot - benefits()$tps_pot)), "Comparison with TPS (DB vs TPS)", icon=icon("cogs"), color="yellow")
 
 	})
+
 
 	output$db_pot <- renderValueBox({
 		valueBox(paste0("£", round(benefits()$db_pot)), "DB total pension value (current)", icon=icon("list"), color="purple")

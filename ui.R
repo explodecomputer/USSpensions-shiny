@@ -1,5 +1,11 @@
 library(shinydashboard)
 
+# This model will forecast the benefits that you will accrue future under three different schemes: 
+# - What you would get if the scheme remained unchanged (Defined benefits, DB) 
+# - What USS is proposing (Defined contribution, DC)
+# - What the Teachers Pension Scheme provides (TPS) for comparison
+
+# Note: This is for future benefits only. The proposed changes will not impact benefits that have already been accrued, and this has not been modelled.
 
 
 dashboard_tab <- function()
@@ -7,9 +13,15 @@ dashboard_tab <- function()
 	tabItem(tabName = "dashboard", fluidRow(
 		column(width=5,
 			fluidRow(box(width=12,
-				p("This is a simple web app that estimates the impact of the USS's proposed changes to the pension scheme."),
-				p("The estimates or for future earnings only (i.e. benefits already accrued will not be affected)"),
-				p(""))
+				p("This is a simple web app that estimates the impact of the USS's proposed changes to the pension scheme. It forecasts the benefits that you will accrue under three different schemes:"),
+				p(tags$ul(
+					tags$li("What you would get if the scheme remained unchanged (Defined benefits, DB)"),
+					tags$li("What USS is proposing (Defined contribution, DC)"),
+					tags$li("What the Teachers Pension Scheme provides (TPS) for comparison")
+				)),
+				p(strong("Note:"), "This is for future benefits only. The proposed changes will not impact benefits that have already been accrued, and this has not been modelled.
+"),
+				p(strong("Note:"), "This is an independent web app. It is not in any way affiliated with USS"))
 			),
 			fluidRow(box(title="Your details", width=12,
 				column(width=4,
@@ -68,10 +80,12 @@ dashboard_tab <- function()
 				),
 				column(width=4,
 					fluidRow(valueBoxOutput("dc_income", width=12)),
+					fluidRow(valueBoxOutput("db_income_diff", width=12)),
 					fluidRow(valueBoxOutput("db_income_perc", width=12))
 				),
 				column(width=4,
 					fluidRow(valueBoxOutput("tps_income", width=12)),
+					fluidRow(valueBoxOutput("tps_income_diff", width=12)),
 					fluidRow(valueBoxOutput("tps_income_perc", width=12))
 				)				
 			),
@@ -82,10 +96,12 @@ dashboard_tab <- function()
 				),
 				column(width=4,
 					fluidRow(valueBoxOutput("dc_pot", width=12)),
+					fluidRow(valueBoxOutput("db_pot_diff", width=12)),
 					fluidRow(valueBoxOutput("db_pot_perc", width=12))
 				),
 				column(width=4,
 					fluidRow(valueBoxOutput("tps_pot", width=12)),
+					fluidRow(valueBoxOutput("tps_pot_diff", width=12)),
 					fluidRow(valueBoxOutput("tps_pot_perc", width=12))
 				)
 			)
@@ -111,6 +127,8 @@ about_tab <- function()
 			)),
 			fluidRow(box(width=12,title="Contact",
 				p("Model and website developed by Neil Davies", tags$a("neil.davies@bristol.ac.uk", href="mailto:neil.davies@bristol.ac.uk"), " and Gibran Hemani", tags$a("g.hemani@bristol.ac.uk", href="mailto:g.hemani@bristol.ac.uk")),
+				p("We are not in any way affiliated with the USS."),
+				p("This model is provisional and we will try to update it as more information comes in and when we can."),
 				p("Please let us know if this modeller can be improved in any way.")
 			)),
 			fluidRow(box(width=12,title="Source code",
