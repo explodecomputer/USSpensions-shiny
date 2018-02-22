@@ -28,8 +28,7 @@ dashboard_tab <- function()
 			fluidRow(box(title="Technical assumptions", width=12,
 				fluidRow(
 					column(width=6,
-						numericInput("input_payinc", "Annual % change in pay (after CPI)", 2, min=0, max=100),
-						numericInput("input_maxpay", "Maximum salary", 55000, min=0, max=Inf)
+						numericInput("input_payinc", "Annual % change in pay (after CPI)", 2, min=0, max=100)
 					),
 					column(width=6,
 						numericInput("input_lei", "% Increase in life expectancy / year", 1.5, min=0, max=100))

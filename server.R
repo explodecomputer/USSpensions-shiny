@@ -4,7 +4,7 @@ server <- function(input, output)
 {
 	benefits <- reactive({
 		pension_calculation(
-			income=income_projection(input$input_income, input$input_payinc / 100, years=68, upper_limit=input$input_maxpay), 
+			income=income_projection(input$input_income, input$input_payinc / 100, years=68, upper_limit=1000000), 
 			annuity=annuity_rates(sex=input$input_sex, type=input$input_spouse, years=68, le_increase=input$input_lei / 100),
 			employee_cont=input$input_employeecont / 100, 
 			employer_cont=input$input_employercont / 100, 
