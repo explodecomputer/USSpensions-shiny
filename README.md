@@ -12,7 +12,7 @@ This is a shiny wrapper for the functions in that package.
 Clone the repository
 
 ```
-git clone git@github.com:explodecomputer/USSpensions-shiny.git
+git clone https://github.com/explodecomputer/USSpensions-shiny.git
 ```
 
 Install the dependencies
