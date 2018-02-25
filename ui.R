@@ -149,8 +149,8 @@ about_tab <- function()
 
 			fluidRow(box(width=12,title="Life expectancy",
 
-				p("The assumptions on life expectancy are taken from the USS valuation documents."),
-				p("The model assumes that if life expectancy increases by 1% the cost of purchasing a given amount of pension income increases by 1%.")
+				p("The model assumes that if life expectancy increases by 1% the cost of purchasing a given amount of pension income increases by 1%."),
+				p("Originally the assumption on increase in life expectancy of 1.5% per year was taken from the ", tags$a("USS valuation document", href="https://www.sheffield.ac.uk/polopoly_fs/1.728969!/file/USSTechnicalprovisionsconsultationdocumentSept2017.pdf"), ", which it reports to have taken from CMI 2015. However this is much higher than the 0.5% value for males and 0.4% value for females projected by the ", tags$a("Office for National Statistics", href="https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/lifeexpectancies/datasets/expectationoflifeprincipalprojectionunitedkingdom"), ". As of 24/2/2018 we have switched the default value to be 0.5%.")
 			)),
 
 			fluidRow(box(width=12,title="Investment returns",
