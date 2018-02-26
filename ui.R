@@ -45,7 +45,12 @@ dashboard_tab <- function()
 						numericInput("input_lei", "% Increase in life expectancy / year", 0.5, min=-100, max=100))
 				)
 			)),
-			fluidRow(box(title="Contributions", width=12,
+			fluidRow(box(title="Contributions to DB pension", width=12,
+				fluidRow(
+					column(width=12,
+						p("8%/12% employee/employer contributions by default but you may have opted for 1% increase in contributions in which case it would be 9%/13%. Note that the DC contributions are fixed at 8%/13.25%")
+					)
+				),
 				fluidRow(
 					column(width=6,
 						numericInput("input_employeecont", "Employee contribution (%)", 8.00, min=0, max=100)
