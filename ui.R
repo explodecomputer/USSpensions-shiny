@@ -90,6 +90,25 @@ dashboard_tab <- function()
 			tags$hr(),
 			fluidRow(
 				column(width=4,
+					fluidRow(box(title="Projections under the current scheme", width=12, collapsible = TRUE, collapsed = TRUE,
+						p("This column shows the projected pension value under the current scheme"),
+						p("The current scheme uses a defined benifits scheme (DB) up to an income threshold of £55,000, and applies a defined contributions (DC) scheme to income above this threshold."))
+					)
+				),
+				column(width=4,
+					fluidRow(box(title="Projections under the proposed scheme", width=12, collapsible = TRUE, collapsed = TRUE,
+						p("This column shows the projected pension value under the new scheme proposed by UUK"),
+						p("It eliminates the DB proportion (essentially setting it to 0), so the entire pension comes from the DC pension")
+					))
+				),
+				column(width=4,
+					fluidRow(box(title="Comparison to Teachers Pension Scheme", width=12, collapsible = TRUE, collapsed = TRUE,
+						p("This column shows the projected pension value for employees at new universities that use the Teachers Pension Scheme. It is shown here for comparison.")
+					))
+				)
+			),
+			fluidRow(
+				column(width=4,
 					fluidRow(valueBoxOutput("db_income", width=12))
 				),
 				column(width=4,
