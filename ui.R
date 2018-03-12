@@ -104,7 +104,7 @@ dashboard_tab <- function()
 				column(width=3,
 					fluidRow(box(title="The UCU+UUK compromise (12/03/2018)", width=12, collapsible = TRUE, collapsed = TRUE,
 						p("Following strike action the UCU and UUK returned to negotiations"),
-						p("Main changes modelled here are that DB contribution threshold drops from £55k to £42k, and the accrual rate has dropped from 1/75 to 1/85. Other changes have not been modelled, most notably that CPI is capped  up to 2.5%. If inflation raises then this could have a negative impact on pension values.")
+						p(tags$a("Main changes", href="https://www.ucu.org.uk/media/9300/Agreement-reached-between-UCU-and-UUK-under-the-auspices-of-ACAS/pdf/UCU_UUK_agreement_at_ACAS_12_March_Final.pdf"), " modelled here are that DB contribution threshold drops from £55k to £42k, and the accrual rate has dropped from 1/75 to 1/85. Other changes have not been modelled, most notably that CPI is capped up to 2.5%. If inflation raises substantially then this could have a dramatically negative impact on pension values.")
 					))
 				),
 				column(width=3,
