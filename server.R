@@ -113,4 +113,46 @@ server <- function(input, output)
 		valueBox(paste0("£", format(round(val), big.mark=",")), "Teachers Pension Scheme annual income", icon=icon("list"), color="yellow")
 	})
 
+
+	##########
+
+
+	output$dc_income2 <- renderValueBox({
+		val <- benefits()$db_pension2
+		valueBox(paste0("£", format(round(val), big.mark=",")), 
+			"DC annual income (proposed)", icon=icon("list"), color="red")
+	})
+
+	output$db_income_perc2 <- renderValueBox({
+		val <- (benefits()$db_pension2 - benefits()$db_pension) / benefits()$db_pension * 100
+		valueBox(paste0(format(round(val), big.mark=","), "%"), 
+			"Proposed change (comparing DC to DB)", icon=icon("cogs"), color="red")
+	})
+
+	output$db_income_diff2 <- renderValueBox({
+		val <- benefits()$db_pension2 - benefits()$db_pension
+		valueBox(paste0("£", format(round(val), big.mark=",")), 
+			"Proposed change (comparing DC to DB)", icon=icon("cogs"), color="red")
+	})
+
+
+	output$dc_pot2 <- renderValueBox({
+		val <- benefits()$db_pot2
+		valueBox(paste0("£", format(round(val), big.mark=",")), "DC total pension value (proposed)", icon=icon("list"), color="red")
+	})
+
+	output$db_pot_perc2 <- renderValueBox({
+		val <- (benefits()$db_pot2 - benefits()$db_pot) / benefits()$db_pot * 100
+		valueBox(paste0(format(round(val), big.mark=","), "%"), 
+			"Proposed change (comparing DC to DB)", icon=icon("cogs"), color="red")
+	})
+
+	output$db_pot_diff2 <- renderValueBox({
+		val <- benefits()$db_pot2 - benefits()$db_pot
+		valueBox(paste0("£", format(round(val), big.mark=",")), 
+			"Proposed change (comparing DC to DB)", icon=icon("cogs"), color="red")
+	})
+
+
 }
+
