@@ -189,7 +189,7 @@ about_tab <- function()
 				p("All code is open source under the GPL-3 license, and can be found here:"),
 				p(tags$a("github.com/explodecomputer/USSpensions", href="https://github.com/explodecomputer/USSpensions")),
 				p(tags$a("github.com/explodecomputer/USSpensions-shiny", href="https://github.com/explodecomputer/USSpensions-shiny")),
-				p("The calculations are based on the values in the spreadsheet found ", tags$a("here", href="https://drive.google.com/file/d/1Vw8STiJ64BoUxf8PKdATGwmyxcFFBYbG/view"))
+				p("The calculations are based on the values in the spreadsheet found ", tags$a("here", href="https://www.dropbox.com/s/ld9hqka4hm5ncfl/modeller_nmd_180313.xlsx?dl=0"))
 			))
 		),
 		column(width=6,
