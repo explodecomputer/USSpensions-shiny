@@ -142,6 +142,7 @@ dashboard_tab <- function()
 					fluidRow(valueBoxOutput("dc_pot", width=12)),
 					fluidRow(valueBoxOutput("db_pot_diff", width=12)),
 					fluidRow(valueBoxOutput("db_pot_perc", width=12))
+					
 				),
 				column(width=3,
 					fluidRow(valueBoxOutput("dc_pot2", width=12)),
@@ -153,6 +154,30 @@ dashboard_tab <- function()
 					fluidRow(valueBoxOutput("tps_pot_diff", width=12)),
 					fluidRow(valueBoxOutput("tps_pot_perc", width=12))
 				)
+			),
+			#Show yearly salary effect
+			tags$hr(),
+			fluidRow(
+			  column(width=3,
+			         fluidRow(box(title="Effect on annual salary", width=12,color="blue"))
+			   ),
+			   column(width=3,
+			          fluidRow(valueBoxOutput("dc_salary_percent", width=12)),
+			          fluidRow(valueBoxOutput("dc_salary_cut_now", width=12)),
+			          fluidRow(valueBoxOutput("dc_salary_cut_final", width=12))
+			   ),
+			   column(width=3,
+			  
+			          fluidRow(valueBoxOutput("dc_salary_percent2", width=12)),
+			          fluidRow(valueBoxOutput("dc_salary_cut_now2", width=12)),
+			          fluidRow(valueBoxOutput("dc_salary_cut_final2", width=12))
+			   ),
+			   column(width=3,
+			  
+			          fluidRow(valueBoxOutput("tps_salary_percent", width=12)),
+			          fluidRow(valueBoxOutput("tps_salary_cut_now", width=12)),
+			          fluidRow(valueBoxOutput("tps_salary_cut_final", width=12))
+			   )
 			)
 		)
 	))
