@@ -160,7 +160,7 @@ server <- function(input, output)
 	  val<-benefits()$dc_salary_percent
 	  
 	  valueBox(paste0(format(round(val*100,digits=1), big.mark=","), "%"), 
-	           "Percent of income needed to save per year to match DB", icon=icon("cogs"), color="red")
+	           "Percent of income needed to invest per year to match DB", icon=icon("cogs"), color="red")
 	})
 	
 
@@ -168,14 +168,14 @@ server <- function(input, output)
 	  val<-benefits()$dc_salary_cut_now
 	  
 	  valueBox(paste0("£", format(round(val), big.mark=",")), 
-	           "Value from current income", icon=icon("cogs"), color="red")
+	           "Cost from current income", icon=icon("cogs"), color="red")
 	})
 
 	output$dc_salary_cut_final <- renderValueBox({
 	  val<-benefits()$dc_salary_cut_final
 	  
 	  valueBox(paste0("£", format(round(val), big.mark=",")), 
-	           "Value from final income", icon=icon("cogs"), color="red")
+	           "Cost from projected final income", icon=icon("cogs"), color="red")
 	})
 	
 	
@@ -189,14 +189,14 @@ server <- function(input, output)
 	  val<-benefits()$dc_salary_cut_now2
 	  
 	  valueBox(paste0("£", format(round(val), big.mark=",")), 
-	           "Value from current income", icon=icon("cogs"), color="red")
+	           "Cost from current income", icon=icon("cogs"), color="red")
 	})
 	
 	output$dc_salary_cut_final2 <- renderValueBox({
 	  val<-benefits()$dc_salary_cut_final2
 	  
 	  valueBox(paste0("£", format(round(val), big.mark=",")), 
-	           "Value from final income", icon=icon("cogs"), color="red")
+	           "Cost from projected final income", icon=icon("cogs"), color="red")
 	})
 	
 	
@@ -205,7 +205,7 @@ server <- function(input, output)
 	  val <-benefits()$tps_salary_percent
 	  
 	  valueBox(paste0(format(round(val*100,digits=1), big.mark=","), "%"), 
-	           "Percent income to invest per year for DB to  match TPS", icon=icon("cogs"), color="yellow")
+	           "Percent of income to invest per year for DB to  match TPS", icon=icon("cogs"), color="yellow")
 	})
 	
 	
@@ -213,14 +213,14 @@ server <- function(input, output)
 	  val<-benefits()$tps_salary_cut_now
 	  
 	  valueBox(paste0("£", format(round(val), big.mark=",")), 
-	           "Value from current year income", icon=icon("cogs"), color="red")
+	           "Cost from current income", icon=icon("cogs"), color="yellow")
 	})
 	
 	output$tps_salary_cut_final <- renderValueBox({
 	  val<-benefits()$tps_salary_cut_final
 	  
 	  valueBox(paste0("£", format(round(val), big.mark=",")), 
-	           "Value from final year income", icon=icon("cogs"), color="red")
+	           "Cost from projected final income", icon=icon("cogs"), color="yellow")
 	})
 	
 }
