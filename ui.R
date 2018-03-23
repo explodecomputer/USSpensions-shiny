@@ -237,7 +237,9 @@ changelog_tab <- function()
 {
 	tabItem(tabName="changelog",
 		fluidRow(box(width=12, title="23rd Mar 2018",			
-			p("Thanks to Dr Alice Thompson for pointing out that 0.35% of employee contributions go towards death in service cover. Thanks to Dr Justin Ales for contributing the projections of effective loss in income. Thanks to Prof Rob Anderson for pointing out further modelling considerations around changes in life expectancy.")
+			p("Thanks to Dr Alice Thompson for pointing out that 0.35% of employee contributions go towards death in service cover."),
+			p("Thanks to Dr Justin Ales for contributing the projections of effective loss in income."), 
+			p("Thanks to Prof Rob Anderson for pointing out further modelling considerations around changes in life expectancy.")
 		)),		
 		fluidRow(box(width=12, title="12th Mar 2018",			
 			p("The projections for the proposal from the first UUK+UCU negotiations. Note that a major component was change to CPI but this has not been modelled.")
