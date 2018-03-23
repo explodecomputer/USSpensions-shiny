@@ -18,6 +18,7 @@
 
 library(shinydashboard)
 
+
 dashboard_tab <- function()
 {
 	tabItem(tabName = "dashboard", fluidRow(
@@ -29,9 +30,8 @@ dashboard_tab <- function()
 					tags$li("What USS is proposing (Defined contribution, DC)"),
 					tags$li("What the Teachers Pension Scheme provides (TPS) for comparison")
 				)),
-				p(strong("Note:"), "This is for future benefits only. The proposed changes will not impact benefits that have already been accrued, and this has not been modelled. This is an independent web app. It is not in any way affiliated with USS."),
-				p(strong("Update:"), "Thank you for all your feedback. We have amended the default value for annual increase in life expectancy from 1.5% to 0.5% as of 24/2/2018 and changed the default investment scheme to USS 67"))
-			),
+				p(strong("Note:"), "This is for future benefits only. The proposed changes will not impact benefits that have already been accrued, and this has not been modelled. This is an independent web app. It is not in any way affiliated with USS.")
+			)),
 			fluidRow(box(title="Your details", width=12,
 				column(width=4,
 					numericInput("input_income", "Income (£):", 35000, min=0, max=1000000)
@@ -46,7 +46,7 @@ dashboard_tab <- function()
 					radioButtons("input_spouse", "Spouse:", c("No"="single", "Yes"="joint"))
 				)
 			)),
-			fluidRow(box(title="Technical assumptions", width=12,
+			fluidRow(box(title="Technical assumptions (see About page)", width=12,
 				fluidRow(
 					column(width=6,
 						numericInput("input_payinc", "Annual % change in pay (after CPI)", 2, min=0, max=100)
@@ -55,15 +55,10 @@ dashboard_tab <- function()
 						numericInput("input_lei", "% Increase in life expectancy / year", 0.5, min=-100, max=100))
 				)
 			)),
-			fluidRow(box(title="Contributions to DC pension", width=12,
-				fluidRow(
-					column(width=12,
-						p("Under the current scheme 8% (employee) + 12% (employer) of income above £55,500 is contributed to the DC pension by default.  You may also have opted for additional 1% of salary to be contributed, which under current scheme is matched by a 1% employer contribution. This can be modelled by setting the contribution rates to 9%/13%. Note that the model for the proposed changes fixes the contributions based on the UUK proposal at 8%/13.25% employee/employer contribution.")
-					)
-				),
+			fluidRow(box(title="Contributions to DC pension (see About page)", width=12,
 				fluidRow(
 					column(width=6,
-						numericInput("input_employeecont", "Employee contribution (%)", 8.00, min=0, max=100)
+						numericInput("input_employeecont", "Employee contribution (%)", 7.65, min=0, max=100)
 					),
 					column(width=6,
 						numericInput("input_employercont", "Employer contribution (%)", 12, min=0, max=100)
@@ -183,7 +178,8 @@ about_tab <- function()
 				p("Model and website developed by Neil Davies", tags$a("neil.davies@bristol.ac.uk", href="mailto:neil.davies@bristol.ac.uk"), " and Gibran Hemani", tags$a("g.hemani@bristol.ac.uk", href="mailto:g.hemani@bristol.ac.uk")),
 				p("We are not in any way affiliated with the USS."),
 				p("This model is provisional and we will try to update it as more information comes in and when we can."),
-				p("Please let us know if this modeller can be improved in any way.")
+				p("Please let us know if this modeller can be improved in any way."),
+				p("Thanks to many who have provided advice, support and feedback. Thanks to Dr Justin Ales for contributing code to calculate effective loss of earnings.")
 			)),
 			fluidRow(box(width=12,title="Source code",
 				p("All code is open source under the GPL-3 license, and can be found here:"),
@@ -202,10 +198,15 @@ about_tab <- function()
 				p("Salary changes take into account increments and cost of living awards.")
 			)),
 
+			fluidRow(box(width=12,title="Contributions",
+				p("Under the current scheme 8% (employee) + 12% (employer) of income above £55,500 is contributed to the DC pension by default.  You may also have opted for additional 1% of salary to be contributed, which under current scheme is matched by a 1% employer contribution. This can be modelled by setting the contribution rates to 9%/13%. Note that the model for the proposed changes fixes the contributions based on the UUK proposal at 8%/13.25% employee/employer contribution. 0.35% of employee contrubutions are deducted for death/ill health cover.")
+			)),
+
 			fluidRow(box(width=12,title="Life expectancy",
 
 				p("The model assumes that if life expectancy increases by 1% the cost of purchasing a given amount of pension income increases by 1%."),
-				p("Originally the assumption on increase in life expectancy of 1.5% per year was taken from the ", tags$a("USS valuation document", href="https://www.sheffield.ac.uk/polopoly_fs/1.728969!/file/USSTechnicalprovisionsconsultationdocumentSept2017.pdf"), ", which it reports to have taken from CMI 2015. However this is much higher than the 0.5% value for males and 0.4% value for females projected by the ", tags$a("Office for National Statistics", href="https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/lifeexpectancies/datasets/expectationoflifeprincipalprojectionunitedkingdom"), ". As of 24/2/2018 we have switched the default value to be 0.5%.")
+				p("Originally the assumption on increase in life expectancy of 1.5% per year was taken from the ", tags$a("USS valuation document", href="https://www.sheffield.ac.uk/polopoly_fs/1.728969!/file/USSTechnicalprovisionsconsultationdocumentSept2017.pdf"), ", which it reports to have taken from CMI 2015. However this is much higher than the 0.5% value for males and 0.4% value for females projected by the ", tags$a("Office for National Statistics", href="https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/lifeexpectancies/datasets/expectationoflifeprincipalprojectionunitedkingdom"), ". As of 24/2/2018 we have switched the default value to be 0.5%."),
+				p("Update 23/03/2018: Important to note that ", tags$a(href="http://jech.bmj.com/content/early/2018/02/20/jech-2017-210401.info", "some projections for changes to life expectancy are levelling out"), ", and you may wish to set this field to 0% for comparison")
 			)),
 
 			fluidRow(box(width=12,title="Investment returns",
@@ -229,12 +230,35 @@ about_tab <- function()
 	)
 }
 
+
+
+
+changelog_tab <- function()
+{
+	tabItem(tabName="changelog",
+		fluidRow(box(width=12, title="23rd Mar 2018",			
+			p("Thanks to Dr Alice Thompson for pointing out that 0.35% of employee contributions go towards death in service cover. Thanks to Dr Justin Ales for contributing the projections of effective loss in income. Thanks to Prof Rob Anderson for pointing out further modelling considerations around changes in life expectancy.")
+		)),		
+		fluidRow(box(width=12, title="12th Mar 2018",			
+			p("The projections for the proposal from the first UUK+UCU negotiations. Note that a major component was change to CPI but this has not been modelled.")
+		)),
+		fluidRow(box(width=12, title="24th Feb 2018",			
+			p("Thank you for all your feedback. We have amended the default value for annual increase in life expectancy from 1.5% to 0.5% as of 24/2/2018 and changed the default investment scheme to USS 67")
+		)),
+		fluidRow(box(width=12, title="13th Feb 2018",			
+			p("First release.")
+		))
+	)
+}
+
+
 dashboardPage(
 	dashboardHeader(title = "USS pensions calculator"),
 	dashboardSidebar(
 		sidebarMenu(
 			menuItem("Dashboard", tabName="dashboard", icon=icon("dashboard")),
-			menuItem("About", tabName = "about", icon=icon("info"))
+			menuItem("About", tabName = "about", icon=icon("info")),
+			menuItem("Change log", tabName = "changelog", icon=icon("cogs"))
 		)
 	),
 	dashboardBody(
@@ -244,7 +268,8 @@ dashboardPage(
 		),
 		tabItems(
 			dashboard_tab(),
-			about_tab()
+			about_tab(),
+			changelog_tab()
 		)
 	)
 )
