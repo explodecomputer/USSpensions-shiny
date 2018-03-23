@@ -30,7 +30,9 @@ dashboard_tab <- function()
 					tags$li("What USS is proposing (Defined contribution, DC)"),
 					tags$li("What the Teachers Pension Scheme provides (TPS) for comparison")
 				)),
-				p(strong("Note:"), "This is for future benefits only. The proposed changes will not impact benefits that have already been accrued, and this has not been modelled. This is an independent web app. It is not in any way affiliated with USS.")
+				p(strong("Note:"), "This is for future benefits only. The proposed changes will not impact benefits that have already been accrued, and this has not been modelled. This is an independent web app. It is not in any way affiliated with USS."),
+				p("Version: ",
+				strong(paste0(paste(scan("version.txt", what=character()), collapse=" "), " (", format(as.Date(file.info("version.txt")$mtime,), "Last update: %d %B %Y"), ")")))
 			)),
 			fluidRow(box(title="Your details", width=12,
 				column(width=4,
