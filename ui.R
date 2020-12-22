@@ -18,6 +18,7 @@
 
 library(shinydashboard)
 library(plotly)
+library(shinycssloaders)
 
 model_2018a <- function()
 {
@@ -51,7 +52,7 @@ model_2018b <- function()
 {
 	fluidRow(
 		column(width=3,
-			fluidRow(valueBoxOutput("db_income", width=12))
+			fluidRow(valueBoxOutput("db_income", width=12) %>% withSpinner())
 		),
 		column(width=3,
 			fluidRow(valueBoxOutput("dc_income", width=12)),
@@ -184,7 +185,7 @@ dashboard_tab <- function()
 				tabPanel("2020 model",
 					p("The latest round of proposed changes concern the employee and employer pension contributions. The proposal is for employees and employers to considerably increase contributions, but this will be for the same final benefit (i.e. the employee will pay more of their salary over the course of their employment for the same amount of return)."),
 					p("The plot here shows the amount that you will contribute to your pension over the remainder of your working life under the 2017 plan (No change), the current plan, and the proposed plans (minimum and maximum)."),
-					plotlyOutput("cont_plot")
+					plotlyOutput("cont_plot") %>% withSpinner()
 				),
 				tabPanel("2018 model",
 					p("This model was first created to understand the USS's 2018 valuation. It forecasts the benefits that you will accrue under three different schemes:"),
