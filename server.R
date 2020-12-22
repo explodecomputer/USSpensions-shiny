@@ -17,21 +17,50 @@
 
 
 library(USSpensions)
+library(tidyverse)
+library(plotly)
 
 server <- function(input, output)
 {
 	benefits <- reactive({
 		pension_calculation(
-			income=income_projection(input$input_income, input$input_payinc / 100, years=68, upper_limit=1000000), 
-			annuity=annuity_rates(sex=input$input_sex, type=input$input_spouse, years=68, le_increase=input$input_lei / 100),
+			income=income_projection(input$input_income, input$input_payinc / 100, years=years_left(input$input_dob), upper_limit=1000000), 
+			annuity=annuity_rates(sex=input$input_sex, type=input$input_spouse, years=years_left(input$input_dob), le_increase=input$input_lei / 100),
 			employee_cont=input$input_employeecont / 100, 
 			employer_cont=input$input_employercont / 100, 
 			prudence = as.numeric(input$input_invprudence), 
 			fund = input$input_invscheme
-		) %>% pension_summary(input$input_dob)
-	  
-	  
+		) %>% pension_summary(input$input_dob)	  
 	})
+
+	contributions <- reactive({
+		income_projection(
+			input$input_income,
+			input$input_payinc / 100,
+			years = years_left(input$input_dob),
+			upper_limit=1000000
+		) %>%
+			contributions_model()
+	})
+
+	output$cont_plot <- renderPlotly({
+		 contributions() %>%
+			group_by(model) %>%
+			slice_tail(n=1) %>%
+			select(model, employee_cumsum, employee_tax_cumsum) %>%
+			pivot_longer(c(employee_tax_cumsum, employee_cumsum)) %>%
+			mutate(
+				name = case_when(name == "employee_cumsum" ~ "Before tax", TRUE ~ "After tax")
+			) %>%
+			{
+				ggplot(., aes(y=-value, x=model)) +
+					geom_bar(stat="identity", aes(fill=name), position="dodge") +
+					theme(axis.text.x=element_text(angle=90)) +
+					labs(x="", y="Employee contributions", fill="")
+			} %>%
+			ggplotly()
+
+		})
 
 	output$retirement_year <- renderValueBox({
 		valueBox(year(retirement_date(input$input_dob)), "Year of retirement based on date of birth", icon=icon("blind"))

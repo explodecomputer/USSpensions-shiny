@@ -1,4 +1,4 @@
-FROM r-base:latest
+FROM r-tidyverse:latest
 
 # Based on https://github.com/rocker-org/shiny
 
@@ -22,16 +22,14 @@ RUN wget --no-verbose https://s3.amazonaws.com/rstudio-shiny-server-os-build/ubu
     rm -f version.txt ss-latest.deb
 
 
-RUN R -e "install.packages(c('dplyr', 'lubridate', 'devtools'), repos='https://cran.rstudio.com/')"
-RUN R -e "install.packages(c('shiny', 'shinydashboard'), repos='https://cran.rstudio.com/')"
-
+RUN R -e "install.packages(c('remotes', 'shiny', 'shinydashboard', 'plotly'), repos='https://cran.rstudio.com/')"
 
 RUN rm -r /srv/shiny-server/*
 RUN mkdir -p /srv/shiny-server/
 COPY . /srv/shiny-server/
 
 RUN echo "hello"
-RUN sudo su - -c "R -e \"devtools::install_github('explodecomputer/USSpensions')\"" 
+RUN sudo su - -c "R -e \"remotes::install_github('explodecomputer/USSpensions')\"" 
 
 EXPOSE 3838
 

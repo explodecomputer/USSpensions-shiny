@@ -17,6 +17,110 @@
 
 
 library(shinydashboard)
+library(plotly)
+
+model_2018a <- function()
+{
+	fluidRow(
+		column(width=3,
+			fluidRow(box(title="Projections under the current scheme", width=12, collapsible = TRUE, collapsed = TRUE,
+				p("This column shows the projected pension value under the current scheme"),
+				p("The current scheme uses a defined benifits scheme (DB) up to an income threshold of £55,000, and applies a defined contributions (DC) scheme to income above this threshold."))
+			)
+		),
+		column(width=3,
+			fluidRow(box(title="The UUK's proposal (23/01/2018)", width=12, collapsible = TRUE, collapsed = TRUE,
+				p("This column shows the projected pension value under the scheme initially proposed by UUK"),
+				p("It eliminates the DB proportion (essentially setting it to 0), so the entire pension comes from the DC pension")
+			))
+		),
+		column(width=3,
+			fluidRow(box(title="The UCU+UUK compromise (12/03/2018)", width=12, collapsible = TRUE, collapsed = TRUE,
+				p("Following strike action the UCU and UUK returned to negotiations"),
+				p(tags$a("Main changes", href="https://www.ucu.org.uk/media/9300/Agreement-reached-between-UCU-and-UUK-under-the-auspices-of-ACAS/pdf/UCU_UUK_agreement_at_ACAS_12_March_Final.pdf"), " modelled here are that DB contribution threshold drops from £55k to £42k, and the accrual rate has dropped from 1/75 to 1/85. Other changes have not been modelled, most notably that CPI is capped up to 2.5%. If inflation raises substantially then this could have a dramatically negative impact on pension values.")
+			))
+		),
+		column(width=3,
+			fluidRow(box(title="Comparison to Teachers Pension Scheme", width=12, collapsible = TRUE, collapsed = TRUE,
+				p("This column shows the projected pension value for employees at new universities that use the Teachers Pension Scheme. It is shown here for comparison.")
+			))
+		)
+	)
+}
+model_2018b <- function()
+{
+	fluidRow(
+		column(width=3,
+			fluidRow(valueBoxOutput("db_income", width=12))
+		),
+		column(width=3,
+			fluidRow(valueBoxOutput("dc_income", width=12)),
+			fluidRow(valueBoxOutput("db_income_diff", width=12)),
+			fluidRow(valueBoxOutput("db_income_perc", width=12))
+		),
+		column(width=3,
+			fluidRow(valueBoxOutput("dc_income2", width=12)),
+			fluidRow(valueBoxOutput("db_income_diff2", width=12)),
+			fluidRow(valueBoxOutput("db_income_perc2", width=12))
+		),
+		column(width=3,
+			fluidRow(valueBoxOutput("tps_income", width=12)),
+			fluidRow(valueBoxOutput("tps_income_diff", width=12)),
+			fluidRow(valueBoxOutput("tps_income_perc", width=12))
+		)				
+	)
+}
+model_2018c <- function()
+{
+	fluidRow(
+		column(width=3,
+			fluidRow(valueBoxOutput("db_pot", width=12))
+		),
+		column(width=3,
+			fluidRow(valueBoxOutput("dc_pot", width=12)),
+			fluidRow(valueBoxOutput("db_pot_diff", width=12)),
+			fluidRow(valueBoxOutput("db_pot_perc", width=12))
+			
+		),
+		column(width=3,
+			fluidRow(valueBoxOutput("dc_pot2", width=12)),
+			fluidRow(valueBoxOutput("db_pot_diff2", width=12)),
+			fluidRow(valueBoxOutput("db_pot_perc2", width=12))
+		),
+		column(width=3,
+			fluidRow(valueBoxOutput("tps_pot", width=12)),
+			fluidRow(valueBoxOutput("tps_pot_diff", width=12)),
+			fluidRow(valueBoxOutput("tps_pot_perc", width=12))
+		)
+	)
+}
+model_2018d <- function()
+{
+	fluidRow(
+	  column(width=3,
+	         fluidRow(box(title="Effect on annual salary", width=12,color="blue"))
+	   ),
+	   column(width=3,
+	          fluidRow(valueBoxOutput("dc_salary_percent", width=12)),
+	          fluidRow(valueBoxOutput("dc_salary_cut_now", width=12)),
+	          fluidRow(valueBoxOutput("dc_salary_cut_final", width=12))
+	   ),
+	   column(width=3,
+	  
+	          fluidRow(valueBoxOutput("dc_salary_percent2", width=12)),
+	          fluidRow(valueBoxOutput("dc_salary_cut_now2", width=12)),
+	          fluidRow(valueBoxOutput("dc_salary_cut_final2", width=12))
+	   ),
+	   column(width=3,
+	  
+	          fluidRow(valueBoxOutput("tps_salary_percent", width=12)),
+	          fluidRow(valueBoxOutput("tps_salary_cut_now", width=12)),
+	          fluidRow(valueBoxOutput("tps_salary_cut_final", width=12))
+		)
+	)
+}
+
+
 
 
 dashboard_tab <- function()
@@ -24,13 +128,7 @@ dashboard_tab <- function()
 	tabItem(tabName = "dashboard", fluidRow(
 		column(width=5,
 			fluidRow(box(width=12,
-				p("This is a simple web app that estimates the impact of the USS's proposed changes to the pension scheme. It forecasts the benefits that you will accrue under three different schemes:"),
-				p(tags$ul(
-					tags$li("What you would get if the scheme remained unchanged (Defined benefits, DB)"),
-					tags$li("What USS is proposing (Defined contribution, DC)"),
-					tags$li("What the Teachers Pension Scheme provides (TPS) for comparison")
-				)),
-				p(strong("Note:"), "This is for future benefits only. The proposed changes will not impact benefits that have already been accrued, and this has not been modelled. This is an independent web app. It is not in any way affiliated with USS."),
+				p("This is a simple web app that estimates the impacts of the various proposed changes to the USS pension scheme."),
 				p("Version: ",
 				strong(paste0(paste(scan("version.txt", what=character()), collapse=" "), " (", format(as.Date(file.info("version.txt")$mtime,), "Last update: %d %B %Y"), ")")))
 			)),
@@ -84,98 +182,29 @@ dashboard_tab <- function()
 			fluidRow(
 				valueBoxOutput("retirement_year", width=12)
 			),
-			tags$hr(),
-			fluidRow(
-				column(width=3,
-					fluidRow(box(title="Projections under the current scheme", width=12, collapsible = TRUE, collapsed = TRUE,
-						p("This column shows the projected pension value under the current scheme"),
-						p("The current scheme uses a defined benifits scheme (DB) up to an income threshold of £55,000, and applies a defined contributions (DC) scheme to income above this threshold."))
-					)
+			fluidRow(tabBox(width=12,
+				tabPanel("2020 model",
+					p("The latest round of proposed changes concern the employee and employer pension contributions. The proposal is for employees and employers to considerably increase contributions, but this will be for the same final benefit (i.e. the employee will pay more of their salary over the course of their employment for the same amount of return)."),
+					p("The plot here shows the amount that you will contribute to your pension over the remainder of your working life under the 2017 plan (No change), the current plan, and the proposed plans (minimum and maximum)."),
+					plotlyOutput("cont_plot")
 				),
-				column(width=3,
-					fluidRow(box(title="The UUK's proposal (23/01/2018)", width=12, collapsible = TRUE, collapsed = TRUE,
-						p("This column shows the projected pension value under the scheme initially proposed by UUK"),
-						p("It eliminates the DB proportion (essentially setting it to 0), so the entire pension comes from the DC pension")
-					))
-				),
-				column(width=3,
-					fluidRow(box(title="The UCU+UUK compromise (12/03/2018)", width=12, collapsible = TRUE, collapsed = TRUE,
-						p("Following strike action the UCU and UUK returned to negotiations"),
-						p(tags$a("Main changes", href="https://www.ucu.org.uk/media/9300/Agreement-reached-between-UCU-and-UUK-under-the-auspices-of-ACAS/pdf/UCU_UUK_agreement_at_ACAS_12_March_Final.pdf"), " modelled here are that DB contribution threshold drops from £55k to £42k, and the accrual rate has dropped from 1/75 to 1/85. Other changes have not been modelled, most notably that CPI is capped up to 2.5%. If inflation raises substantially then this could have a dramatically negative impact on pension values.")
-					))
-				),
-				column(width=3,
-					fluidRow(box(title="Comparison to Teachers Pension Scheme", width=12, collapsible = TRUE, collapsed = TRUE,
-						p("This column shows the projected pension value for employees at new universities that use the Teachers Pension Scheme. It is shown here for comparison.")
-					))
+				tabPanel("2018 model",
+					p("This model was first created to understand the USS's 2018 valuation. It forecasts the benefits that you will accrue under three different schemes:"),
+					p(tags$ul(
+						tags$li("What you would get if the scheme remained unchanged (Defined benefits, DB)"),
+						tags$li("What USS is proposing (Defined contribution, DC)"),
+						tags$li("What the Teachers Pension Scheme provides (TPS) for comparison")
+					)),
+					p(strong("Note:"), "This is for future benefits only. The proposed changes will not impact benefits that have already been accrued, and this has not been modelled. This is an independent web app. It is not in any way affiliated with USS."),
+					model_2018a(),
+					tags$hr(),
+					model_2018b(),
+					tags$hr(),
+					model_2018c(),
+					tags$hr(),
+					model_2018d()
 				)
-			),
-			fluidRow(
-				column(width=3,
-					fluidRow(valueBoxOutput("db_income", width=12))
-				),
-				column(width=3,
-					fluidRow(valueBoxOutput("dc_income", width=12)),
-					fluidRow(valueBoxOutput("db_income_diff", width=12)),
-					fluidRow(valueBoxOutput("db_income_perc", width=12))
-				),
-				column(width=3,
-					fluidRow(valueBoxOutput("dc_income2", width=12)),
-					fluidRow(valueBoxOutput("db_income_diff2", width=12)),
-					fluidRow(valueBoxOutput("db_income_perc2", width=12))
-				),
-				column(width=3,
-					fluidRow(valueBoxOutput("tps_income", width=12)),
-					fluidRow(valueBoxOutput("tps_income_diff", width=12)),
-					fluidRow(valueBoxOutput("tps_income_perc", width=12))
-				)				
-			),
-			tags$hr(),
-			fluidRow(
-				column(width=3,
-					fluidRow(valueBoxOutput("db_pot", width=12))
-				),
-				column(width=3,
-					fluidRow(valueBoxOutput("dc_pot", width=12)),
-					fluidRow(valueBoxOutput("db_pot_diff", width=12)),
-					fluidRow(valueBoxOutput("db_pot_perc", width=12))
-					
-				),
-				column(width=3,
-					fluidRow(valueBoxOutput("dc_pot2", width=12)),
-					fluidRow(valueBoxOutput("db_pot_diff2", width=12)),
-					fluidRow(valueBoxOutput("db_pot_perc2", width=12))
-				),
-				column(width=3,
-					fluidRow(valueBoxOutput("tps_pot", width=12)),
-					fluidRow(valueBoxOutput("tps_pot_diff", width=12)),
-					fluidRow(valueBoxOutput("tps_pot_perc", width=12))
-				)
-			),
-			#Show yearly salary effect
-			tags$hr(),
-			fluidRow(
-			  column(width=3,
-			         fluidRow(box(title="Effect on annual salary", width=12,color="blue"))
-			   ),
-			   column(width=3,
-			          fluidRow(valueBoxOutput("dc_salary_percent", width=12)),
-			          fluidRow(valueBoxOutput("dc_salary_cut_now", width=12)),
-			          fluidRow(valueBoxOutput("dc_salary_cut_final", width=12))
-			   ),
-			   column(width=3,
-			  
-			          fluidRow(valueBoxOutput("dc_salary_percent2", width=12)),
-			          fluidRow(valueBoxOutput("dc_salary_cut_now2", width=12)),
-			          fluidRow(valueBoxOutput("dc_salary_cut_final2", width=12))
-			   ),
-			   column(width=3,
-			  
-			          fluidRow(valueBoxOutput("tps_salary_percent", width=12)),
-			          fluidRow(valueBoxOutput("tps_salary_cut_now", width=12)),
-			          fluidRow(valueBoxOutput("tps_salary_cut_final", width=12))
-			   )
-			)
+			))
 		)
 	))
 }
