@@ -1,17 +1,17 @@
-FROM r-tidyverse:latest
+FROM rocker/tidyverse:latest
 
 # Based on https://github.com/rocker-org/shiny
 
 MAINTAINER Gibran Hemani "g.hemani@bristol.ac.uk"
 
 # Install dependencies and Download and install shiny server
-RUN apt-get update && apt-get install -y -t unstable \
+RUN apt-get update && apt-get install -y \
     sudo \
     gdebi-core \
     pandoc \
     pandoc-citeproc \
     libcurl4-gnutls-dev \
-    libcairo2-dev/unstable \
+    libcairo2-dev \
     libxt-dev \
     libssl-dev
 
