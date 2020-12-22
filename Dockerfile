@@ -22,7 +22,7 @@ RUN wget --no-verbose https://s3.amazonaws.com/rstudio-shiny-server-os-build/ubu
     rm -f version.txt ss-latest.deb
 
 
-RUN R -e "install.packages(c('remotes', 'shiny', 'shinydashboard', 'plotly', 'shinycssloaders'), repos='https://cran.rstudio.com/')"
+RUN R -e "install.packages(c('tidyverse', 'remotes', 'shiny', 'shinydashboard', 'plotly', 'shinycssloaders'), repos='https://cran.rstudio.com/')"
 
 RUN rm -r /srv/shiny-server/*
 RUN mkdir -p /srv/shiny-server/
