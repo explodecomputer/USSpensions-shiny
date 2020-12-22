@@ -126,24 +126,22 @@ model_2018d <- function()
 dashboard_tab <- function()
 {
 	tabItem(tabName = "dashboard", fluidRow(
-		column(width=5,
+		column(width=3,
 			fluidRow(box(width=12,
 				p("This is a simple web app that estimates the impacts of the various proposed changes to the USS pension scheme."),
 				p("Version: ",
 				strong(paste0(paste(scan("version.txt", what=character()), collapse=" "), " (", format(as.Date(file.info("version.txt")$mtime,), "Last update: %d %B %Y"), ")")))
 			)),
 			fluidRow(box(title="Your details", width=12,
-				column(width=4,
+				fluidRow(column(width=6,
 					numericInput("input_income", "Income (£):", 35000, min=0, max=1000000)
 				),
-				column(width=4,
+				column(width=6,
 					dateInput("input_dob", "Date of birth:", value="1984-09-06")
-				),
-				column(width=2,
-					radioButtons("input_sex", "Sex:", c("Female"="women", "Male"="men"))
-				),
-				column(width=2,
-					radioButtons("input_spouse", "Spouse:", c("No"="single", "Yes"="joint"))
+				)),
+				fluidRow(
+					column(width=6, radioButtons("input_sex", "Sex:", c("Female"="women", "Male"="men"))),
+					column(width=6, radioButtons("input_spouse", "Spouse:", c("No"="single", "Yes"="joint")))
 				)
 			)),
 			fluidRow(box(title="Technical assumptions (see About page)", width=12,
@@ -176,7 +174,7 @@ dashboard_tab <- function()
 				)
 			))
 		),
-		column(width=7,
+		column(width=9,
 
 			# Retirement year
 			fluidRow(
@@ -196,6 +194,7 @@ dashboard_tab <- function()
 						tags$li("What the Teachers Pension Scheme provides (TPS) for comparison")
 					)),
 					p(strong("Note:"), "This is for future benefits only. The proposed changes will not impact benefits that have already been accrued, and this has not been modelled. This is an independent web app. It is not in any way affiliated with USS."),
+					tags$hr(),
 					model_2018a(),
 					tags$hr(),
 					model_2018b(),
@@ -292,6 +291,9 @@ about_tab <- function()
 changelog_tab <- function()
 {
 	tabItem(tabName="changelog",
+		fluidRow(box(width=12, title="22nd Dec 2020",
+			p("Added new model to calculate contributions based on 2020 valuations")
+		)),
 		fluidRow(box(width=12, title="23rd Mar 2018",			
 			p("Thanks to Dr Alice Thompson for pointing out that 0.35% of employee contributions go towards death in service cover."),
 			p("Thanks to Dr Justin Ales for contributing the projections of effective loss in income."), 

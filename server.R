@@ -54,9 +54,10 @@ server <- function(input, output)
 			) %>%
 			{
 				ggplot(., aes(y=-value, x=model)) +
-					geom_bar(stat="identity", aes(fill=name), position="dodge") +
-					theme(axis.text.x=element_text(angle=90)) +
-					labs(x="", y="Employee contributions", fill="")
+					geom_bar(stat="identity", aes(fill=name), position="dodge", width=0.5) +
+					labs(x="", y="Employee contributions (£)", fill="") +
+					theme_bw() +
+					theme(axis.text.x=element_text(angle=45))
 			} %>%
 			ggplotly()
 
