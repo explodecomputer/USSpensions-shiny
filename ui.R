@@ -183,9 +183,18 @@ dashboard_tab <- function()
 			),
 			fluidRow(tabBox(width=12,
 				tabPanel("2020 model",
-					p("The latest round of proposed changes concern the employee and employer pension contributions. The proposal is for employees and employers to considerably increase contributions, but this will be for the same final benefit (i.e. the employee will pay more of their salary over the course of their employment for the same amount of return)."),
-					p("The plot here shows the amount that you will contribute to your pension over the remainder of your working life under the 2017 plan (No change), the current plan, and the proposed plans (minimum and maximum)."),
-					plotlyOutput("cont_plot") %>% withSpinner()
+					p("The USS is currently in the process of agreeing the 2020 Valuation with employers. This negotiation determines the assumptions used to estimate the scheme's deficit, and how much we will have to pay for our pensions in future. The most important assumption is the assumed return the scheme will make over the next 30 years. If returns are expected to be lower, then we have to pay more today, to get a given size of pension in the future. The ", tags$a("proposal", href="https://www.ussemployers.org.uk/sites/default/files/field/attachemnt/USS%20Technical%20Provisions%20consultation%202020%20valuation_0.pdf"), "published by the USS, substantially reduces the assumed rate of return. This very substantially increases the estimated deficit, and makes the cost of accruing future defined benefit pensions extremely expensive - estimated to be between 40.8% and 67.9% of payroll (compaed to the current 30.7%). This increase in costs in being driven almost entirely by changes to the assumptions used in the valuation."),
+					p("The USS's current proposal is for employees and employers to considerably increase contributions, but this will be for the same final benefit (i.e. the employee will pay more of their salary over the course of their employment for the same amount of return)."),
+					p("The plot here shows the amount that you will contribute to your pension over the remainder of your working life under:"),
+					tags$ul(
+						tags$li("2017 plan ('No change')"),
+						tags$li("The current plans"),
+						tags$li("The minimum proposed increase of 40.8%"),
+						tags$li("The maximum proposed increase of 47.9%")
+					),
+					p(tags$strong("Despite these increased costs, you each year the amount of additional pension you will earn will remain unchanged.")),
+					p("It is in no-one's interests for the USS to be underfunded. However, on average, these changes are likely to further increase the scheme's already very substantial surplus. The scheme is looking to divert further cash away from university's day-to-day mission - teaching and research - to further increase the scheme’s surplus."),
+ 					plotlyOutput("cont_plot") %>% withSpinner()
 				),
 				tabPanel("2018 model",
 					p("This model was first created to understand the USS's 2018 valuation. It forecasts the benefits that you will accrue under three different schemes:"),
