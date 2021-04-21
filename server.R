@@ -22,6 +22,8 @@ library(plotly)
 
 server <- function(input, output)
 {
+
+	# 2018 model
 	benefits <- reactive({
 		pension_calculation(
 			income=income_projection(input$input_income, input$input_payinc / 100, years=years_left(input$input_dob), upper_limit=1000000), 
@@ -32,36 +34,6 @@ server <- function(input, output)
 			fund = input$input_invscheme
 		) %>% pension_summary(input$input_dob)	  
 	})
-
-	contributions <- reactive({
-		income_projection(
-			input$input_income,
-			input$input_payinc / 100,
-			years = years_left(input$input_dob),
-			upper_limit=1000000
-		) %>%
-			contributions_model()
-	})
-
-	output$cont_plot <- renderPlotly({
-		 contributions() %>%
-			group_by(model) %>%
-			slice_tail(n=1) %>%
-			select(model, employee_cumsum, employee_tax_cumsum) %>%
-			pivot_longer(c(employee_tax_cumsum, employee_cumsum)) %>%
-			mutate(
-				name = case_when(name == "employee_cumsum" ~ "Before tax", TRUE ~ "After tax")
-			) %>%
-			{
-				ggplot(., aes(y=-value, x=model)) +
-					geom_bar(stat="identity", aes(fill=name), position="dodge", width=0.5) +
-					labs(x="", y="Employee contributions (£)", fill="") +
-					theme_bw() +
-					theme(axis.text.x=element_text(angle=45))
-			} %>%
-			ggplotly()
-
-		})
 
 	output$retirement_year <- renderValueBox({
 		valueBox(year(retirement_date(input$input_dob)), "Year of retirement based on date of birth", icon=icon("blind"))
@@ -252,6 +224,143 @@ server <- function(input, output)
 	  valueBox(paste0("£-", format(round(val), big.mark=",")), 
 	           "Loss in final annual income to match difference", icon=icon("cogs"), color="yellow")
 	})
+
+
+	# 2020 model
+	benefits_2020 <- reactive({
+		pension_calculation_2020(
+			income=income_projection(
+				input$input_income, 
+				input$input_payinc / 100, 
+				years=years_left(input$input_dob), 
+				upper_limit=1000000
+			), 
+			annuity=annuity_rates(
+				sex=input$input_sex, 
+				type=input$input_spouse, 
+				years=years_left(input$input_dob), 
+				le_increase=input$input_lei / 100),
+			scenario="Scenario 3a"
+		)
+	})
+
+	benefits_2020_summary <- reactive({
+		benefits_2020() %>% pension_calculation_2020_summary()
+	})
+
+	output$plot_total_pot <- renderPlotly({
+		benefits_2020() %>%
+		plot_pension() %>%
+		ggplotly()
+	})
 	
+	output$current_income <- renderValueBox({
+		val <- benefits_2020_summary() %>%
+			filter(scenario == "current") %>%
+			{.$total_pension}
+		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 
+			"Projected annual income", icon=icon("list"), color="purple")
+	})
+
+	output$scenario1_income <- renderValueBox({
+		val <- benefits_2020_summary() %>%
+			filter(scenario == "scenario_1") %>%
+			{.$total_pension}
+		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 
+			"Projected annual income", icon=icon("list"), color="red")
+	})
+
+	output$scenario1_perc <- renderValueBox({
+		val1 <- benefits_2020_summary() %>%
+			filter(scenario == "scenario_1") %>%
+			{.$total_pension}
+		val2 <- benefits_2020_summary() %>%
+			filter(scenario == "current") %>%
+			{.$total_pension}
+		val <- (val1-val2)/val2 * 100
+		valueBox(paste0(format(round(val), big.mark=","), "%"), 
+			"Compared to current scheme", icon=icon("cogs"), color="red")
+	})
+
+	output$scenario2a_income <- renderValueBox({
+		val <- benefits_2020_summary() %>%
+			filter(scenario == "scenario_2a") %>%
+			{.$total_pension}
+		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 
+			"Projected annual income", icon=icon("list"), color="red")
+	})
+
+	output$scenario2a_perc <- renderValueBox({
+		val1 <- benefits_2020_summary() %>%
+			filter(scenario == "scenario_2a") %>%
+			{.$total_pension}
+		val2 <- benefits_2020_summary() %>%
+			filter(scenario == "current") %>%
+			{.$total_pension}
+		val <- (val1-val2)/val2 * 100
+		valueBox(paste0(format(round(val), big.mark=","), "%"), 
+			"Compared to current scheme", icon=icon("cogs"), color="red")
+	})
+
+	output$scenario2b_income <- renderValueBox({
+		val <- benefits_2020_summary() %>%
+			filter(scenario == "scenario_2b") %>%
+			{.$total_pension}
+		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 
+			"Projected annual income", icon=icon("list"), color="red")
+	})
+
+	output$scenario2b_perc <- renderValueBox({
+		val1 <- benefits_2020_summary() %>%
+			filter(scenario == "scenario_2b") %>%
+			{.$total_pension}
+		val2 <- benefits_2020_summary() %>%
+			filter(scenario == "current") %>%
+			{.$total_pension}
+		val <- (val1-val2)/val2 * 100
+		valueBox(paste0(format(round(val), big.mark=","), "%"), 
+			"Compared to current scheme", icon=icon("cogs"), color="red")
+	})
+
+	output$scenario3a_income <- renderValueBox({
+		val <- benefits_2020_summary() %>%
+			filter(scenario == "scenario_3a") %>%
+			{.$total_pension}
+		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 
+			"Projected annual income", icon=icon("list"), color="red")
+	})
+
+	output$scenario3a_perc <- renderValueBox({
+		val1 <- benefits_2020_summary() %>%
+			filter(scenario == "scenario_3a") %>%
+			{.$total_pension}
+		val2 <- benefits_2020_summary() %>%
+			filter(scenario == "current") %>%
+			{.$total_pension}
+		val <- (val1-val2)/val2 * 100
+		valueBox(paste0(format(round(val), big.mark=","), "%"), 
+			"Compared to current scheme", icon=icon("cogs"), color="red")
+	})
+
+	output$scenario3b_income <- renderValueBox({
+		val <- benefits_2020_summary() %>%
+			filter(scenario == "scenario_3b") %>%
+			{.$total_pension}
+		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 
+			"Projected annual income", icon=icon("list"), color="red")
+	})
+
+	output$scenario3b_perc <- renderValueBox({
+		val1 <- benefits_2020_summary() %>%
+			filter(scenario == "scenario_3b") %>%
+			{.$total_pension}
+		val2 <- benefits_2020_summary() %>%
+			filter(scenario == "current") %>%
+			{.$total_pension}
+		val <- (val1-val2)/val2 * 100
+		valueBox(paste0(format(round(val), big.mark=","), "%"), 
+			"Compared to current scheme", icon=icon("cogs"), color="red")
+	})
+
 }
 

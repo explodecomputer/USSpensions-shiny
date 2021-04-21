@@ -20,6 +20,52 @@ library(shinydashboard)
 library(plotly)
 library(shinycssloaders)
 
+inputs <- function()
+{
+	column(width=3,
+	fluidRow(
+		box(width=12,
+			p("This is a simple web app that estimates the impacts of the various proposed changes to the USS pension scheme."),
+			p("Version: ",
+				strong(
+					paste0(
+						paste(scan("version.txt", what=character()), collapse=" "), " (", format(as.Date(file.info("version.txt")$mtime,), "Last update: %d %B %Y"), ")")))
+		)
+	),
+	fluidRow(
+		box(title="Your details", width=12,
+			fluidRow(
+				column(width=6,
+					numericInput("input_income", "Income (£):", 35000, min=0, max=1000000)
+				),
+				column(width=6,
+					dateInput("input_dob", "Date of birth:", value="1984-09-06")
+				)
+			),
+			fluidRow(
+				column(width=6, radioButtons("input_sex", "Sex:", c("Female"="women", "Male"="men"))),
+				column(width=6, radioButtons("input_spouse", "Spouse:", c("No"="single", "Yes"="joint")))
+			)
+		)
+	),
+	fluidRow(
+		box(title="Technical assumptions (see About page)", width=12,
+			fluidRow(
+				column(width=6,
+					numericInput("input_payinc", "Annual % change in pay (after CPI)", 2, min=0, max=100)
+				),
+				column(width=6,
+					numericInput("input_lei", "% Increase in life expectancy / year", 0.5, min=-100, max=100)
+				)
+			)
+		)
+	),
+	fluidRow(
+		valueBoxOutput("retirement_year", width=12)
+	)
+	)
+}
+
 model_2018a <- function()
 {
 	fluidRow(
@@ -121,139 +167,36 @@ model_2018d <- function()
 	)
 }
 
-
-
-
-dashboard_tab <- function()
+model_2018_details <- function()
 {
-	tabItem(tabName = "dashboard", fluidRow(
-		column(width=3,
-			fluidRow(box(width=12,
-				p("This is a simple web app that estimates the impacts of the various proposed changes to the USS pension scheme."),
-				p("Version: ",
-				strong(paste0(paste(scan("version.txt", what=character()), collapse=" "), " (", format(as.Date(file.info("version.txt")$mtime,), "Last update: %d %B %Y"), ")")))
-			)),
-			fluidRow(box(title="Your details", width=12,
-				fluidRow(column(width=6,
-					numericInput("input_income", "Income (£):", 35000, min=0, max=1000000)
+	tabPanel("Details",
+		fluidRow(box(title="Contributions to DC pension (see About page)", width=12,
+			fluidRow(
+				column(width=6,
+					numericInput("input_employeecont", "Employee contribution (%)", 7.65, min=0, max=100)
 				),
 				column(width=6,
-					dateInput("input_dob", "Date of birth:", value="1984-09-06")
-				)),
-				fluidRow(
-					column(width=6, radioButtons("input_sex", "Sex:", c("Female"="women", "Male"="men"))),
-					column(width=6, radioButtons("input_spouse", "Spouse:", c("No"="single", "Yes"="joint")))
+					numericInput("input_employercont", "Employer contribution (%)", 12, min=0, max=100)
 				)
-			)),
-			fluidRow(box(title="Technical assumptions (see About page)", width=12,
-				fluidRow(
-					column(width=6,
-						numericInput("input_payinc", "Annual % change in pay (after CPI)", 2, min=0, max=100)
-					),
-					column(width=6,
-						numericInput("input_lei", "% Increase in life expectancy / year", 0.5, min=-100, max=100))
-				)
-			)),
-			fluidRow(box(title="Contributions to DC pension (see About page)", width=12,
-				fluidRow(
-					column(width=6,
-						numericInput("input_employeecont", "Employee contribution (%)", 7.65, min=0, max=100)
-					),
-					column(width=6,
-						numericInput("input_employercont", "Employer contribution (%)", 12, min=0, max=100)
-					)
-				)
-			)),
-			fluidRow(box(title="Investment assumptions", width=12,
-				fluidRow(
-					column(width=6,
-						radioButtons("input_invscheme", "Assumed investment scheme", c("USS", "Growth fund", "Moderate growth fund", "Cautious growth fund", "Cash fund"))
-					),
-					column(width=6,
-						radioButtons("input_invprudence", "Investment prudence", c(67, 50))
-					)
-				)
-			))
-		),
-		column(width=9,
-
-			# Retirement year
+			)
+		)),
+		fluidRow(box(title="Investment assumptions", width=12,
 			fluidRow(
-				valueBoxOutput("retirement_year", width=12)
-			),
-			fluidRow(tabBox(width=12,
-				tabPanel("2020 model",
-					p("The USS is currently in the process of agreeing the 2020 Valuation with employers. This negotiation determines the assumptions used to estimate the scheme's deficit, and how much we will have to pay for our pensions in future. The most important assumption is the assumed return the scheme will make over the next 30 years. If returns are expected to be lower, then we have to pay more today, to get a given size of pension in the future. The ", tags$a("proposal", href="https://www.ussemployers.org.uk/sites/default/files/field/attachemnt/USS%20Technical%20Provisions%20consultation%202020%20valuation_0.pdf"), "published by the USS, substantially reduces the assumed rate of return. This very substantially increases the estimated deficit, and makes the cost of accruing future defined benefit pensions extremely expensive - estimated to be between 40.8% and 67.9% of payroll (compaed to the current 30.7%). This increase in costs in being driven almost entirely by changes to the assumptions used in the valuation."),
-					p("The USS's current proposal is for employees and employers to considerably increase contributions, but this will be for the same final benefit (i.e. the employee will pay more of their salary over the course of their employment for the same amount of return)."),
-					p("The plot here shows the amount that you will contribute to your pension over the remainder of your working life under:"),
-					tags$ul(
-						tags$li("2017 plan ('No change')"),
-						tags$li("The current plans"),
-						tags$li("The minimum proposed increase of 40.8%"),
-						tags$li("The maximum proposed increase of 47.9%")
-					),
-					p(tags$strong("Despite these increased costs, you each year the amount of additional pension you will earn will remain unchanged.")),
-					p("It is in no-one's interests for the USS to be underfunded. However, on average, these changes are likely to further increase the scheme's already very substantial surplus. The scheme is looking to divert further cash away from university's day-to-day mission - teaching and research - to further increase the scheme’s surplus."),
- 					plotlyOutput("cont_plot") %>% withSpinner()
+				column(width=6,
+					radioButtons("input_invscheme", "Assumed investment scheme", c("USS", "Growth fund", "Moderate growth fund", "Cautious growth fund", "Cash fund"))
 				),
-				tabPanel("2018 model",
-					p("This model was first created to understand the USS's 2018 valuation. It forecasts the benefits that you will accrue under three different schemes:"),
-					p(tags$ul(
-						tags$li("What you would get if the scheme remained unchanged (Defined benefits, DB)"),
-						tags$li("What USS is proposing (Defined contribution, DC)"),
-						tags$li("What the Teachers Pension Scheme provides (TPS) for comparison")
-					)),
-					p(strong("Note:"), "This is for future benefits only. The proposed changes will not impact benefits that have already been accrued, and this has not been modelled. This is an independent web app. It is not in any way affiliated with USS."),
-					tags$hr(),
-					model_2018a(),
-					tags$hr(),
-					model_2018b(),
-					tags$hr(),
-					model_2018c(),
-					tags$hr(),
-					model_2018d()
+				column(width=6,
+					radioButtons("input_invprudence", "Investment prudence", c(67, 50))
 				)
-			))
-		)
-	))
-}
-
-
-about_tab <- function()
-{
-	tabItem(tabName = "about",
-		column(width=6,
-			fluidRow(box(width=12,
-				title="About",
-				p("The USS pension scheme has proposed a change from the defined benefits (DB) model to the defined contributions (DC) model."),
-				p("This app provides some projections that shows the likely impact on future performance for these different models. It also provides the results for the Post 92 Teacher Pension Scheme (TPS) for comparison."),
-				p(strong("Pension values that have already accumulated are not going to be affected")),
-				p(strong("Only future pension benefits will be affected. This modeller only shows the impact on future earnings"))
-			)),
-			fluidRow(box(width=12,
-				title="Disclaimer",
-				p("This modeller provides a forecast of the pensions we can expect to receive under the current defined benefit scheme and the UUK proposed defined contribution scheme. We are not actuaries, accountants or financial advisors. This is for information only and should not be used for personal financial decisions. Before making any decisions about your pension you should seek professional advice.")
-			)),
-			fluidRow(box(width=12,
-				title="Other models and resources",
-				p("You can find professional projections elsewhere, e.g. ", tags$a("one generated by Aon", href="https://www.employerspensionsforum.co.uk/sites/default/files/uploads/aon-hewitt-modelling-proposed-uss-benefit-changes.pdf"), " and ", tags$a("one generated by First Actuarial", href="https://www.ucu.org.uk/media/8916/TPS--USS-no-DB-comparison-First-Actuarial-29-Nov-17/pdf/firstacturial_ussvtps_nodb_29nov17.pdf"), "."),
-				p("Gábor Csányi has also produced a web application, which you can find ", tags$a("here", href="http://www2.eng.cam.ac.uk/~gc121/pension.html"), ".")
-			)),
-			fluidRow(box(width=12,title="Contact",
-				p("Model and website developed by Neil Davies", tags$a("neil.davies@bristol.ac.uk", href="mailto:neil.davies@bristol.ac.uk"), " and Gibran Hemani", tags$a("g.hemani@bristol.ac.uk", href="mailto:g.hemani@bristol.ac.uk")),
-				p("We are not in any way affiliated with the USS."),
-				p("This model is provisional and we will try to update it as more information comes in and when we can."),
-				p("Please let us know if this modeller can be improved in any way."),
-				p("Thanks to many who have provided advice, support and feedback. Thanks to Dr Justin Ales for contributing code to calculate effective loss of earnings.")
-			)),
-			fluidRow(box(width=12,title="Source code",
-				p("All code is open source under the GPL-3 license, and can be found here:"),
-				p(tags$a("github.com/explodecomputer/USSpensions", href="https://github.com/explodecomputer/USSpensions")),
-				p(tags$a("github.com/explodecomputer/USSpensions-shiny", href="https://github.com/explodecomputer/USSpensions-shiny")),
-				p("The calculations are based on the values in the spreadsheet found ", tags$a("here", href="https://www.dropbox.com/s/ld9hqka4hm5ncfl/modeller_nmd_180313.xlsx?dl=0"))
-			))
-		),
-		column(width=6,
+			)
+		)),
+		p("This model was first created to understand the USS's 2018 valuation. It forecasts the benefits that you will accrue under three different schemes:"),
+		p(tags$ul(
+			tags$li("What you would get if the scheme remained unchanged (Defined benefits, DB)"),
+			tags$li("What USS is proposing (Defined contribution, DC)"),
+			tags$li("What the Teachers Pension Scheme provides (TPS) for comparison")
+		)),
+		p(strong("Note:"), "This is for future benefits only. The proposed changes will not impact benefits that have already been accrued, and this has not been modelled. This is an independent web app. It is not in any way affiliated with USS."),
 			fluidRow(box(width=12,title="Assumptions",
 				p("Most assumptions are taken from the",  tags$a("USS valuation document", href="https://www.sheffield.ac.uk/polopoly_fs/1.728969!/file/USSTechnicalprovisionsconsultationdocumentSept2017.pdf")),
 				p("All figures are in real terms - i.e. after inflation."),
@@ -290,6 +233,181 @@ about_tab <- function()
 					tags$li("The 50% 'best estimate'. The USS expects returns to be better than this 50% of the time."),
 					tags$li("The second option is a more conservative 67% estimate. The USS expects returns to better than this 67% of the time.")
 				)
+			))	)
+}
+
+model_2020 <- function()
+{
+	div(
+		model_2020b(),
+		tags$hr(),
+		p("The graph below shows the growth of your pension pot over time across the various scenarios. Your projected final pension pot is the value at the right-most end of the x-axis - i.e. at in the projected year of your retirement."),
+		model_2020_plot()
+	)
+}
+
+model_2020b <- function()
+{
+	fluidRow(
+		column(width=2,
+			fluidRow(box(title="Current scheme", width=12, collapsible = TRUE, collapsed = TRUE,
+				p("This column shows the projected pension value under the current scheme"),
+				p("The current scheme uses a defined benifits scheme (DB) up to an income threshold of £59,883, and applies a defined contributions (DC) scheme to income above this threshold."))
+			),
+			fluidRow(valueBoxOutput("current_income", width=12)),
+		),
+		column(width=2,
+			fluidRow(box(title="Proposed scenario 1", width=12, collapsible = TRUE, collapsed = TRUE,
+				p("This column shows the projected pension value under 2020 valuation scenario 1"),
+				p("It eliminates the DB proportion (essentially setting it to 0), so the entire pension comes from the DC pension with employee contributions of 9.6% and employer contributions of 1.8%")
+			)),
+			fluidRow(valueBoxOutput("scenario1_income", width=12)),
+			fluidRow(valueBoxOutput("scenario1_perc", width=12))
+		),
+		column(width=2,
+			fluidRow(box(title="Proposed scenario 2a", width=12, collapsible = TRUE, collapsed = TRUE,
+				p("This column shows the projected pension value under 2020 valuation scenario 2a"),
+				p("It applies DB pension with accrual rate of 1/170, an employee contribution rate of 12% with 0% employer contribution, and a DC pension after salary reaches £40,000")
+			)),
+			fluidRow(valueBoxOutput("scenario2a_income", width=12)),
+			fluidRow(valueBoxOutput("scenario2a_perc", width=12))
+		),
+		column(width=2,
+			fluidRow(box(title="Proposed scenario 2b", width=12, collapsible = TRUE, collapsed = TRUE,
+				p("This column shows the projected pension value under 2020 valuation scenario 2b"),
+				p("It applies DB pension with accrual rate of 1/165, an employee contribution rate of 12% with 0% employer contribution, and a DC pension after salary reaches £30,000")
+			)),
+			fluidRow(valueBoxOutput("scenario2b_income", width=12)),
+			fluidRow(valueBoxOutput("scenario2b_perc", width=12))
+		),
+		column(width=2,
+			fluidRow(box(title="Proposed scenario 3a", width=12, collapsible = TRUE, collapsed = TRUE,
+				p("This column shows the projected pension value under 2020 valuation scenario 3a"),
+				p("It applies DB pension with accrual rate of 1/115, an employee contribution rate of 16% with 0% employer contribution, and a DC pension after salary reaches £40,000")
+			)),
+			fluidRow(valueBoxOutput("scenario3a_income", width=12)),
+			fluidRow(valueBoxOutput("scenario3a_perc", width=12))
+		),
+		column(width=2,
+			fluidRow(box(title="Proposed scenario 3b", width=12, collapsible = TRUE, collapsed = TRUE,
+				p("This column shows the projected pension value under 2020 valuation scenario 3b"),
+				p("It applies DB pension with accrual rate of 1/110, an employee contribution rate of 16% with 0% employer contribution, and a DC pension after salary reaches £30,000")
+			)),
+			fluidRow(valueBoxOutput("scenario3b_income", width=12)),
+			fluidRow(valueBoxOutput("scenario3b_perc", width=12))
+		)				
+	)
+}
+
+model_2020_plot <- function()
+{	
+	fluidRow(
+		plotlyOutput("plot_total_pot") %>%
+			withSpinner()
+	)
+}
+
+model_2020_details <- function()
+{
+fluidRow(
+	box(title="Background", width=12,
+		p("Most assumptions for these projections are taken from the ", tags$a("USS 2020 valuation document", href=" https://www.uss.co.uk/-/media/project/ussmainsite/files/about-us/valuations_yearly/2020-valuation/uss-technical-provisions-consultation-2020-valuation.pdf?rev=89e3e8d0fbb344bf8d9609f6d0eb412e&hash=484A87C8F8D8719BF0AA864D7CC1A3D4"), "."),
+		p("All figures are in real terms - i.e. after inflation."),
+		p("The modeller only models the pensions we will accrue in future - pensions already accrued will not be changed."),
+		p("Further details about the assumptions are provided on the tabs below."),
+		p("See the about page for links to the source code, and how to get in contact with us. Let us know if this modeller can be improved in any way."),
+		p("The modeller assumes that you will buy an annuity at retirement with your DC pot and that the DB pension is bought using an annuity."),
+		p("Salary changes take into account increments and cost of living awards."),
+		p("This modeller provides a forecast of the pensions we can expect to receive under the current defined benefit defined contribution hybrid scheme and the UUK proposed defined contribution scheme. I am not an actuary, accountant or a financial advisor. This is for information only and should not be used for personal financial decisions. Before making any decisions about your pension you should seek professional advice.")
+	),
+	box(title="Investment returns", width=12,
+		p("TODO")
+	),
+	box(title="Life expectancy", width=12,
+		p("The model assumes that if life expectancy increases by 0.5% a year the cost of purchasing a given amount of pension income increases by 0.5% a year."),
+		p("The USS valuation documents assume a 1.6% and 1.8% improvements for women and men in mortality per year based on Continuous Mortality Investigation."),
+		p("This model uses an estimate of change in life expectancy at age 65 from the ONS: https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/lifeexpectancies/datasets/expectationoflifeprincipalprojectionunitedkingdom")
+	),
+		
+	box(title="Differences by gender", width=12,
+		p("Insurance companies cannot discriminate against individuals because of gender. The differences in annuity rates between men and women is driven by the age of spouse. We assume the male spouse is 3 years older. The annuity assumptions can be changed on the annuity tab.")
+	)
+)
+}
+
+dashboard_tab <- function()
+{
+	tabItem(tabName = "dashboard", fluidRow(
+		inputs(),
+		column(width=9,
+			fluidRow(tabBox(width=12,
+				tabPanel("2020 valuation model",
+					fluidRow(
+						tabBox(width=12,
+							tabPanel("Projections",
+								model_2020()
+							),
+							tabPanel("Details",
+								model_2020_details()
+							)
+						)
+					)
+				),
+				tabPanel("2018 valuation model",
+					fluidRow(tabBox(width=12,
+						tabPanel("Projections",
+							model_2018a(),
+							tags$hr(),
+							model_2018b(),
+							tags$hr(),
+							model_2018c(),
+							tags$hr(),
+							model_2018d()
+						),
+						tabPanel("Details",
+							model_2018_details()
+						)
+					))
+				)
+			))
+		)
+	))
+}
+
+
+about_tab <- function()
+{
+	tabItem(tabName = "about",
+		column(width=6,
+			fluidRow(box(width=12,
+				title="About",
+				p("The USS pension scheme has proposed a number of changes over the past several years."),
+				p("This app provides some projections that shows the likely impact on future performance for these different models."),
+				p(strong("Pension values that have already accumulated are not going to be affected")),
+				p(strong("Only future pension benefits will be affected. This modeller only shows the impact on future earnings"))
+			)),
+			fluidRow(box(width=12,
+				title="Disclaimer",
+				p("This modeller provides a forecast of the pensions we can expect to receive under the current defined benefit scheme and the UUK proposed defined contribution scheme. We are not actuaries, accountants or financial advisors. This is for information only and should not be used for personal financial decisions. Before making any decisions about your pension you should seek professional advice.")
+			)),
+			fluidRow(box(width=12,
+				title="Other models and resources",
+				p("You can find professional projections elsewhere, e.g. ", tags$a("one generated by Aon", href="https://www.employerspensionsforum.co.uk/sites/default/files/uploads/aon-hewitt-modelling-proposed-uss-benefit-changes.pdf"), " and ", tags$a("one generated by First Actuarial", href="https://www.ucu.org.uk/media/8916/TPS--USS-no-DB-comparison-First-Actuarial-29-Nov-17/pdf/firstacturial_ussvtps_nodb_29nov17.pdf"), "."),
+				p("Gábor Csányi has also produced a web application, which you can find ", tags$a("here", href="http://www2.eng.cam.ac.uk/~gc121/pension.html"), ".")
+			))
+		),
+		column(width=6,
+			fluidRow(box(width=12,title="Contact",
+				p("Model and website developed by Neil Davies", tags$a("neil.davies@bristol.ac.uk", href="mailto:neil.davies@bristol.ac.uk"), " and Gibran Hemani", tags$a("g.hemani@bristol.ac.uk", href="mailto:g.hemani@bristol.ac.uk")),
+				p("We are not in any way affiliated with the USS."),
+				p("This model is provisional and we will try to update it as more information comes in and when we can."),
+				p("Please let us know if this modeller can be improved in any way."),
+				p("Thanks to many who have provided advice, support and feedback. Thanks to Dr Justin Ales for contributing code to calculate effective loss of earnings.")
+			)),
+			fluidRow(box(width=12,title="Source code",
+				p("All code is open source under the GPL-3 license, and can be found here:"),
+				p(tags$a("github.com/explodecomputer/USSpensions", href="https://github.com/explodecomputer/USSpensions")),
+				p(tags$a("github.com/explodecomputer/USSpensions-shiny", href="https://github.com/explodecomputer/USSpensions-shiny"))
 			))
 		)
 	)
@@ -301,6 +419,9 @@ about_tab <- function()
 changelog_tab <- function()
 {
 	tabItem(tabName="changelog",
+		fluidRow(box(width=12, title="21st Apr 2021",
+			p("Updated 2020 valuation model - previously we were just estimating the change in contributions, but now we are projecting the pensions as in the 2018 model")
+		)),
 		fluidRow(box(width=12, title="22nd Dec 2020",
 			p("Added new model to calculate contributions based on 2020 valuations")
 		)),
