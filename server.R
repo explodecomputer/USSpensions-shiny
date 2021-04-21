@@ -39,6 +39,10 @@ server <- function(input, output)
 		valueBox(year(retirement_date(input$input_dob)), "Year of retirement based on date of birth", icon=icon("blind"))
 	})
 
+	output$retirement_year <- renderValueBox({
+		valueBox(year(retirement_date(input$input_dob)), "Year of retirement based on date of birth", icon=icon("blind"))
+	})
+
 	output$dc_income <- renderValueBox({
 		val <- benefits()$dc_pension
 		valueBox(paste0("£", format(round(val), big.mark=",")), 
