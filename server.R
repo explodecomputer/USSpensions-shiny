@@ -26,16 +26,16 @@ server <- function(input, output)
 	# 2018 model
 	benefits <- reactive({
 		pension_calculation(
-			income=income_projection(input$input_income, input$input_payinc / 100, years=years_left(input$input_dob), upper_limit=1000000), 
-			annuity=annuity_rates(sex=input$input_sex, type=input$input_spouse, years=years_left(input$input_dob), le_increase=input$input_lei / 100),
-			employee_cont=input$input_employeecont / 100, 
-			employer_cont=input$input_employercont / 100, 
-			prudence = as.numeric(input$input_invprudence), 
-			fund = input$input_invscheme
-		) %>% pension_summary(input$input_dob)	  
+			income=income_projection(input$input_income18, input$input_payinc18 / 100, years=years_left(input$input_dob18), upper_limit=1000000), 
+			annuity=annuity_rates(sex=input$input_sex18, type=input$input_spouse18, years=years_left(input$input_dob18), le_increase=input$input_lei18 / 100),
+			employee_cont=input$input_employeecont18 / 100, 
+			employer_cont=input$input_employercont18 / 100, 
+			prudence = as.numeric(input$input_invprudence18), 
+			fund = input$input_invscheme18
+		) %>% pension_summary(input$input_dob18)	  
 	})
 
-	output$retirement_year <- renderValueBox({
+	output$retirement_year18 <- renderValueBox({
 		valueBox(year(retirement_date(input$input_dob)), "Year of retirement based on date of birth", icon=icon("blind"))
 	})
 

@@ -20,11 +20,11 @@ library(shinydashboard)
 library(plotly)
 library(shinycssloaders)
 
-inputs <- function()
+inputs2020 <- function()
 {
 	column(width=3,
 	fluidRow(
-		box(width=12,
+		box(width=12, title="2020 USS valuation",
 			p("This is a simple web app that estimates the impacts of the various proposed changes to the USS pension scheme."),
 			p("Version: ",
 				strong(
@@ -63,6 +63,72 @@ inputs <- function()
 	fluidRow(
 		valueBoxOutput("retirement_year", width=12)
 	)
+	)
+}
+
+inputs2018 <- function()
+{
+	column(width=3,
+		fluidRow(
+			box(width=12, title="2018 USS valuation",
+				p("This is a simple web app that estimates the impacts of the various proposed changes to the USS pension scheme."),
+				p("Version: ",
+					strong(
+						paste0(
+							paste(scan("version.txt", what=character()), collapse=" "), " (", format(as.Date(file.info("version.txt")$mtime,), "Last update: %d %B %Y"), ")")))
+			)
+		),
+		fluidRow(
+			box(title="Your details", width=12,
+				fluidRow(
+					column(width=6,
+						numericInput("input_income18", "Income (£):", 35000, min=0, max=1000000)
+					),
+					column(width=6,
+						dateInput("input_dob18", "Date of birth:", value="1984-09-06")
+					)
+				),
+				fluidRow(
+					column(width=6, radioButtons("input_sex18", "Sex:", c("Female"="women", "Male"="men"))),
+					column(width=6, radioButtons("input_spouse18", "Spouse:", c("No"="single", "Yes"="joint")))
+				)
+			)
+		),
+		fluidRow(
+			box(title="Technical assumptions (see About page)", width=12,
+				fluidRow(
+					column(width=6,
+						numericInput("input_payinc18", "Annual % change in pay (after CPI)", 2, min=0, max=100)
+					),
+					column(width=6,
+						numericInput("input_lei18", "% Increase in life expectancy / year", 0.5, min=-100, max=100)
+					)
+				)
+			)
+		),
+		fluidRow(box(title="Contributions to DC pension (see About page)", width=12,
+			fluidRow(
+				column(width=6,
+					numericInput("input_employeecont18", "Employee contribution (%)", 7.65, min=0, max=100)
+				),
+				column(width=6,
+					numericInput("input_employercont18", "Employer contribution (%)", 12, min=0, max=100)
+				)
+			)
+		)),
+		fluidRow(box(title="Investment assumptions", width=12,
+			fluidRow(
+				column(width=6,
+					radioButtons("input_invscheme18", "Assumed investment scheme", c("USS", "Growth fund", "Moderate growth fund", "Cautious growth fund", "Cash fund"))
+				),
+				column(width=6,
+					radioButtons("input_invprudence18", "Investment prudence", c(67, 50))
+				)
+			)
+		)),
+		fluidRow(
+			valueBoxOutput("retirement_year18", width=12)
+		)
 	)
 }
 
@@ -170,26 +236,6 @@ model_2018d <- function()
 model_2018_details <- function()
 {
 	tabPanel("Details",
-		fluidRow(box(title="Contributions to DC pension (see About page)", width=12,
-			fluidRow(
-				column(width=6,
-					numericInput("input_employeecont", "Employee contribution (%)", 7.65, min=0, max=100)
-				),
-				column(width=6,
-					numericInput("input_employercont", "Employer contribution (%)", 12, min=0, max=100)
-				)
-			)
-		)),
-		fluidRow(box(title="Investment assumptions", width=12,
-			fluidRow(
-				column(width=6,
-					radioButtons("input_invscheme", "Assumed investment scheme", c("USS", "Growth fund", "Moderate growth fund", "Cautious growth fund", "Cash fund"))
-				),
-				column(width=6,
-					radioButtons("input_invprudence", "Investment prudence", c(67, 50))
-				)
-			)
-		)),
 		p("This model was first created to understand the USS's 2018 valuation. It forecasts the benefits that you will accrue under three different schemes:"),
 		p(tags$ul(
 			tags$li("What you would get if the scheme remained unchanged (Defined benefits, DB)"),
@@ -239,9 +285,10 @@ model_2018_details <- function()
 model_2020 <- function()
 {
 	div(
+		p("We present projections of your future pension income from Defined Benefit (where you accrue income each year) and Defined Contribution (where you have your own investment) and the total value of benefits, including lump sum, based on the assumptions used in the USS 2020 valuation. Five scenarios were presented (1, 2a, 2b, 3a, 3b), click the '+' button to get a brief description for each. A comparison is provided against projections based on the current deal. More information in the Details tab."),
 		model_2020b(),
 		tags$hr(),
-		p("The graph below shows the growth of your pension pot over time across the various scenarios. Your projected final pension pot is the value at the right-most end of the x-axis - i.e. at in the projected year of your retirement."),
+		p("The graph below shows the growth of the value of your pension over time across the various scenarios, including the current deal. The projected value of your final pension is the value at the right-most end of the x-axis - i.e. at in the projected year of your retirement."),
 		model_2020_plot()
 	)
 }
@@ -321,7 +368,7 @@ fluidRow(
 		p("This modeller provides a forecast of the pensions we can expect to receive under the current defined benefit defined contribution hybrid scheme and the UUK proposed defined contribution scheme. I am not an actuary, accountant or a financial advisor. This is for information only and should not be used for personal financial decisions. Before making any decisions about your pension you should seek professional advice.")
 	),
 	box(title="Investment returns", width=12,
-		p("TODO")
+		p("USS outlined their projected investment returns in the 2020 valuation document. They project in scenario 1 a 0% investment return per year. Scenario 2a and 2b assumes 0.1% investment returns per year. Scenario 3a and 3b assumes 0.2% investment returns per year.")
 	),
 	box(title="Life expectancy", width=12,
 		p("The model assumes that if life expectancy increases by 0.5% a year the cost of purchasing a given amount of pension income increases by 0.5% a year."),
@@ -335,39 +382,43 @@ fluidRow(
 )
 }
 
-dashboard_tab <- function()
+dashboard2020_tab <- function()
 {
-	tabItem(tabName = "dashboard", fluidRow(
-		inputs(),
+	tabItem(tabName = "dashboard2020", fluidRow(
+		inputs2020(),
+		column(width=9,
+			fluidRow(
+				tabBox(width=12,
+					tabPanel("Projections",
+						model_2020()
+					),
+					tabPanel("Details",
+						model_2020_details()
+					)
+				)
+			)
+		)
+	))
+}
+
+
+dashboard2018_tab <- function()
+{
+	tabItem(tabName = "dashboard2018", fluidRow(
+		inputs2018(),
 		column(width=9,
 			fluidRow(tabBox(width=12,
-				tabPanel("2020 valuation model",
-					fluidRow(
-						tabBox(width=12,
-							tabPanel("Projections",
-								model_2020()
-							),
-							tabPanel("Details",
-								model_2020_details()
-							)
-						)
-					)
+				tabPanel("Projections",
+					model_2018a(),
+					tags$hr(),
+					model_2018b(),
+					tags$hr(),
+					model_2018c(),
+					tags$hr(),
+					model_2018d()
 				),
-				tabPanel("2018 valuation model",
-					fluidRow(tabBox(width=12,
-						tabPanel("Projections",
-							model_2018a(),
-							tags$hr(),
-							model_2018b(),
-							tags$hr(),
-							model_2018c(),
-							tags$hr(),
-							model_2018d()
-						),
-						tabPanel("Details",
-							model_2018_details()
-						)
-					))
+				tabPanel("Details",
+					model_2018_details()
 				)
 			))
 		)
@@ -447,7 +498,8 @@ dashboardPage(
 	dashboardHeader(title = "USS pensions calculator"),
 	dashboardSidebar(
 		sidebarMenu(
-			menuItem("Dashboard", tabName="dashboard", icon=icon("dashboard")),
+			menuItem("2020 USS valuation", tabName="dashboard2020", icon=icon("dashboard")),
+			menuItem("2018 USS valuation", tabName="dashboard2018", icon=icon("dashboard")),
 			menuItem("About", tabName = "about", icon=icon("info")),
 			menuItem("Change log", tabName = "changelog", icon=icon("cogs"))
 		)
@@ -458,7 +510,8 @@ dashboardPage(
 			includeScript("google-analytics.js")
 		),
 		tabItems(
-			dashboard_tab(),
+			dashboard2020_tab(),
+			dashboard2018_tab(),
 			about_tab(),
 			changelog_tab()
 		)
