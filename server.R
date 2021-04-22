@@ -341,7 +341,7 @@ server <- function(input, output)
 			filter(scenario == "scenario_2a") %>%
 			{.$total_pot}
 		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 
-			"Projected annual income", icon=icon("list"), color="red")
+			"Projected total pension value", icon=icon("list"), color="red")
 	})
 
 	output$scenario2a_perc <- renderValueBox({
@@ -393,7 +393,7 @@ server <- function(input, output)
 			filter(scenario == "scenario_2b") %>%
 			{.$total_pot}
 		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 
-			"Projected annual income", icon=icon("list"), color="red")
+			"Projected total pension value", icon=icon("list"), color="red")
 	})
 
 	output$scenario2b_perc <- renderValueBox({
@@ -445,7 +445,7 @@ server <- function(input, output)
 			filter(scenario == "scenario_3a") %>%
 			{.$total_pot}
 		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 
-			"Projected annual income", icon=icon("list"), color="red")
+			"Projected total pension value", icon=icon("list"), color="red")
 	})
 
 	output$scenario3a_perc <- renderValueBox({
@@ -497,7 +497,7 @@ server <- function(input, output)
 			filter(scenario == "scenario_3b") %>%
 			{.$total_pot}
 		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 
-			"Projected annual income", icon=icon("list"), color="red")
+			"Projected total pension value", icon=icon("list"), color="red")
 	})
 
 	output$scenario3b_perc <- renderValueBox({
