@@ -253,9 +253,11 @@ server <- function(input, output)
 	})
 
 	output$plot_total_pot <- renderPlotly({
-		benefits_2020() %>%
-		plot_pension() %>%
-		ggplotly()
+		p <- benefits_2020() %>%
+		plot_pension() +
+			scale_y_continuous(labels=function(x) paste0("£", x/1000)) +
+			labs(y="Total pension value (x1000)")
+		ggplotly(p)
 	})
 	
 	output$current_income <- renderValueBox({
@@ -266,12 +268,28 @@ server <- function(input, output)
 			"Projected annual income", icon=icon("list"), color="purple")
 	})
 
+	output$current_pot <- renderValueBox({
+		val <- benefits_2020_summary() %>%
+			filter(scenario == "current") %>%
+			{.$total_pot}
+		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 
+			"Projected total pension value", icon=icon("list"), color="purple")
+	})
+
 	output$scenario1_income <- renderValueBox({
 		val <- benefits_2020_summary() %>%
 			filter(scenario == "scenario_1") %>%
 			{.$total_pension}
 		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 
 			"Projected annual income", icon=icon("list"), color="red")
+	})
+
+	output$scenario1_pot <- renderValueBox({
+		val <- benefits_2020_summary() %>%
+			filter(scenario == "scenario_1") %>%
+			{.$total_pot}
+		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 
+			"Projected total pension value", icon=icon("list"), color="red")
 	})
 
 	output$scenario1_perc <- renderValueBox({
@@ -286,10 +304,42 @@ server <- function(input, output)
 			"Compared to current scheme", icon=icon("cogs"), color="red")
 	})
 
+	output$scenario1_pot_perc <- renderValueBox({
+		val1 <- benefits_2020_summary() %>%
+			filter(scenario == "scenario_1") %>%
+			{.$total_pot}
+		val2 <- benefits_2020_summary() %>%
+			filter(scenario == "current") %>%
+			{.$total_pot}
+		val <- (val1-val2)/val2 * 100
+		valueBox(paste0(format(round(val), big.mark=","), "%"), 
+			"Compared to current scheme", icon=icon("cogs"), color="red")
+	})
+
+	output$scenario1_pot_diff <- renderValueBox({
+		val1 <- benefits_2020_summary() %>%
+			filter(scenario == "scenario_1") %>%
+			{.$total_pot}
+		val2 <- benefits_2020_summary() %>%
+			filter(scenario == "current") %>%
+			{.$total_pot}
+		val <- val1-val2
+		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 
+			"Compared to current scheme", icon=icon("cogs"), color="red")
+	})
+
 	output$scenario2a_income <- renderValueBox({
 		val <- benefits_2020_summary() %>%
 			filter(scenario == "scenario_2a") %>%
 			{.$total_pension}
+		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 
+			"Projected annual income", icon=icon("list"), color="red")
+	})
+
+	output$scenario2a_pot <- renderValueBox({
+		val <- benefits_2020_summary() %>%
+			filter(scenario == "scenario_2a") %>%
+			{.$total_pot}
 		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 
 			"Projected annual income", icon=icon("list"), color="red")
 	})
@@ -306,10 +356,42 @@ server <- function(input, output)
 			"Compared to current scheme", icon=icon("cogs"), color="red")
 	})
 
+	output$scenario2a_pot_perc <- renderValueBox({
+		val1 <- benefits_2020_summary() %>%
+			filter(scenario == "scenario_2a") %>%
+			{.$total_pot}
+		val2 <- benefits_2020_summary() %>%
+			filter(scenario == "current") %>%
+			{.$total_pot}
+		val <- (val1-val2)/val2 * 100
+		valueBox(paste0(format(round(val), big.mark=","), "%"), 
+			"Compared to current scheme", icon=icon("cogs"), color="red")
+	})
+
+	output$scenario2a_pot_diff <- renderValueBox({
+		val1 <- benefits_2020_summary() %>%
+			filter(scenario == "scenario_2a") %>%
+			{.$total_pot}
+		val2 <- benefits_2020_summary() %>%
+			filter(scenario == "current") %>%
+			{.$total_pot}
+		val <- val1-val2
+		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 
+			"Compared to current scheme", icon=icon("cogs"), color="red")
+	})
+
 	output$scenario2b_income <- renderValueBox({
 		val <- benefits_2020_summary() %>%
 			filter(scenario == "scenario_2b") %>%
 			{.$total_pension}
+		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 
+			"Projected annual income", icon=icon("list"), color="red")
+	})
+
+	output$scenario2b_pot <- renderValueBox({
+		val <- benefits_2020_summary() %>%
+			filter(scenario == "scenario_2b") %>%
+			{.$total_pot}
 		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 
 			"Projected annual income", icon=icon("list"), color="red")
 	})
@@ -326,10 +408,42 @@ server <- function(input, output)
 			"Compared to current scheme", icon=icon("cogs"), color="red")
 	})
 
+	output$scenario2b_pot_perc <- renderValueBox({
+		val1 <- benefits_2020_summary() %>%
+			filter(scenario == "scenario_2b") %>%
+			{.$total_pot}
+		val2 <- benefits_2020_summary() %>%
+			filter(scenario == "current") %>%
+			{.$total_pot}
+		val <- (val1-val2)/val2 * 100
+		valueBox(paste0(format(round(val), big.mark=","), "%"), 
+			"Compared to current scheme", icon=icon("cogs"), color="red")
+	})
+
+	output$scenario2b_pot_diff <- renderValueBox({
+		val1 <- benefits_2020_summary() %>%
+			filter(scenario == "scenario_2b") %>%
+			{.$total_pot}
+		val2 <- benefits_2020_summary() %>%
+			filter(scenario == "current") %>%
+			{.$total_pot}
+		val <- val1-val2
+		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 
+			"Compared to current scheme", icon=icon("cogs"), color="red")
+	})
+
 	output$scenario3a_income <- renderValueBox({
 		val <- benefits_2020_summary() %>%
 			filter(scenario == "scenario_3a") %>%
 			{.$total_pension}
+		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 
+			"Projected annual income", icon=icon("list"), color="red")
+	})
+
+	output$scenario3a_pot <- renderValueBox({
+		val <- benefits_2020_summary() %>%
+			filter(scenario == "scenario_3a") %>%
+			{.$total_pot}
 		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 
 			"Projected annual income", icon=icon("list"), color="red")
 	})
@@ -346,10 +460,42 @@ server <- function(input, output)
 			"Compared to current scheme", icon=icon("cogs"), color="red")
 	})
 
+	output$scenario3a_pot_perc <- renderValueBox({
+		val1 <- benefits_2020_summary() %>%
+			filter(scenario == "scenario_3a") %>%
+			{.$total_pot}
+		val2 <- benefits_2020_summary() %>%
+			filter(scenario == "current") %>%
+			{.$total_pot}
+		val <- (val1-val2)/val2 * 100
+		valueBox(paste0(format(round(val), big.mark=","), "%"), 
+			"Compared to current scheme", icon=icon("cogs"), color="red")
+	})
+
+	output$scenario3a_pot_diff <- renderValueBox({
+		val1 <- benefits_2020_summary() %>%
+			filter(scenario == "scenario_3a") %>%
+			{.$total_pot}
+		val2 <- benefits_2020_summary() %>%
+			filter(scenario == "current") %>%
+			{.$total_pot}
+		val <- val1-val2
+		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 
+			"Compared to current scheme", icon=icon("cogs"), color="red")
+	})
+
 	output$scenario3b_income <- renderValueBox({
 		val <- benefits_2020_summary() %>%
 			filter(scenario == "scenario_3b") %>%
 			{.$total_pension}
+		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 
+			"Projected annual income", icon=icon("list"), color="red")
+	})
+
+	output$scenario3b_pot <- renderValueBox({
+		val <- benefits_2020_summary() %>%
+			filter(scenario == "scenario_3b") %>%
+			{.$total_pot}
 		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 
 			"Projected annual income", icon=icon("list"), color="red")
 	})
@@ -363,6 +509,30 @@ server <- function(input, output)
 			{.$total_pension}
 		val <- (val1-val2)/val2 * 100
 		valueBox(paste0(format(round(val), big.mark=","), "%"), 
+			"Compared to current scheme", icon=icon("cogs"), color="red")
+	})
+
+	output$scenario3b_pot_perc <- renderValueBox({
+		val1 <- benefits_2020_summary() %>%
+			filter(scenario == "scenario_3b") %>%
+			{.$total_pot}
+		val2 <- benefits_2020_summary() %>%
+			filter(scenario == "current") %>%
+			{.$total_pot}
+		val <- (val1-val2)/val2 * 100
+		valueBox(paste0(format(round(val), big.mark=","), "%"), 
+			"Compared to current scheme", icon=icon("cogs"), color="red")
+	})
+
+	output$scenario3b_pot_diff <- renderValueBox({
+		val1 <- benefits_2020_summary() %>%
+			filter(scenario == "scenario_3b") %>%
+			{.$total_pot}
+		val2 <- benefits_2020_summary() %>%
+			filter(scenario == "current") %>%
+			{.$total_pot}
+		val <- val1-val2
+		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 
 			"Compared to current scheme", icon=icon("cogs"), color="red")
 	})
 
