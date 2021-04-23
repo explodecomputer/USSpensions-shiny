@@ -292,6 +292,10 @@ model_2020 <- function()
 		h3("Total pension value projections"),
 		model_2020c(),
 		tags$hr(),
+		h3("Contributions"),
+		p("Currently employees make a pension contribution of 9.6% of their income and employers contribute 21.1%. Assuming these contribution rates remain fixed, projections for the total contributions are provided below."),
+		model_2020d(),
+		tags$hr(),
 		p("The graph below shows the growth of the value of your pension over time across the various scenarios, including the current deal. The projected value of your final pension is the value at the right-most end of the x-axis - i.e. at in the projected year of your retirement."),
 		model_2020_plot()
 	)
@@ -405,6 +409,15 @@ model_2020c <- function()
 			fluidRow(valueBoxOutput("scenario3b_pot_perc", width=12)),
 			fluidRow(valueBoxOutput("scenario3b_pot_diff", width=12))
 		)				
+	)
+}
+
+model_2020d <- function()
+{
+	fluidRow(
+		valueBoxOutput("contributions_employee", width=3),
+		valueBoxOutput("contributions_employer", width=3),
+		valueBoxOutput("contributions_total", width=3)
 	)
 }
 
