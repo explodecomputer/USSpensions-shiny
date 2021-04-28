@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uss-pensions-shiny-deployment
+  labels:
+    app: uss-pensions-shiny
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: uss-pensions-shiny
+  template:
+    metadata:
+      labels:
+        app: uss-pensions-shiny
+    spec:
+      containers:
+      - name: uss-pensions-shiny
+        image: explodecomputer/uss-pensions-shiny:latest
+        command: ["/usr/bin/shiny-server.sh"]
+        ports:
+        - containerPort: 8011

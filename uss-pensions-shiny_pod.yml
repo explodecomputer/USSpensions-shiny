@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: uss-pensions-shiny-pod
+spec:
+  containers:
+  - name: refassign
+    image: explodecomputer/uss-pensions-shiny:latest
+    args: ["/usr/bin/shiny-server.sh"]
+    ports:
+    - containerPort: 8011
