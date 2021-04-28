@@ -53,7 +53,6 @@ cd USSpensions-shiny
 ./release.sh
 ```
 
-
 ## Kubernates deployment
 
 1. Setup `kubectl` on local machine
@@ -61,3 +60,9 @@ cd USSpensions-shiny
 3. `kubectl apply -f uss-pensions-shiny_service.yml`
 4. Check with `kubectl describe [deployment/service] uss-pensions-shiny`
 
+Updating when image updates:
+
+1. List existing pods `kubectl get pods`
+2. Delete each of them `kubectl delete pod uss-pensions-shiny-deployment-<somehash>`
+
+They should be automatically replaced
