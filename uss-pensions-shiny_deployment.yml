@@ -5,7 +5,7 @@ metadata:
   labels:
     app: uss-pensions-shiny
 spec:
-  replicas: 1
+  replicas: 10
   selector:
     matchLabels:
       app: uss-pensions-shiny

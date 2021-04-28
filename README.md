@@ -52,3 +52,12 @@ Then build and deploy
 cd USSpensions-shiny
 ./release.sh
 ```
+
+
+## Kubernates deployment
+
+1. Setup `kubectl` on local machine
+2. `kubectl apply -f uss-pensions-shiny_deployment.yml`
+3. `kubectl apply -f uss-pensions-shiny_service.yml`
+4. Check with `kubectl describe [deployment/service] uss-pensions-shiny`
+
