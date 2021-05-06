@@ -238,13 +238,14 @@ server <- function(input, output)
 				input$input_payinc / 100, 
 				years=years_left(input$input_dob), 
 				upper_limit=1000000
-			), 
+				), 
 			annuity=annuity_rates(
 				sex=input$input_sex, 
 				type=input$input_spouse, 
 				years=years_left(input$input_dob), 
 				le_increase=input$input_lei / 100),
-			scenario="Scenario 3a"
+			scenario="Scenario 3a",
+			incr = input$input_incr
 		)
 	})
 
