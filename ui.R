@@ -463,12 +463,11 @@ fluidRow(
 	box(title="Inflation Assumptions", width=12,
 	    p("Inflation is estimated in the modeller by randomly drawing estimates from the distribution of ", tags$a("observed inflation rates", href=" https://https://www.ons.gov.uk/economy/inflationandpriceindices/datasets/consumerpriceindices"), "after the inflation cap implemented in 1996. Forecasted rates from this distribution are capped at 2.5%."),
 	    p("Options to vary this are presented, which include: Altering the cap on inflation to 5%, altering the assumption that post-96 inflation rates are more likely to be observed than rates between 1947 and 1996. Full details of the calculations can be found ", tags$a("here.", href="https://github.com/explodecomputer/USSpensions/blob/master/misc/get_cpi.r")
-	    ),
-	)
+	    )
+	),
 	box(title="Differences by gender", width=12,
 		p("Insurance companies cannot discriminate against individuals because of gender. The differences in annuity rates between men and women is driven by the age of spouse. We assume the male spouse is 3 years older. The annuity assumptions can be changed on the annuity tab.")
 	)
-)
 )
 }
 
