@@ -536,5 +536,27 @@ server <- function(input, output)
 			"Compared to current scheme", icon=icon("cogs"), color="red")
 	})
 
+	# contributions
+	output$contributions_employee <- renderValueBox({
+		val <- benefits_2020() %>%
+			{sum(.$current$income * 0.096)}
+		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 
+			"Total employee contribution", icon=icon("cogs"), color="yellow")
+	})
+
+	output$contributions_employer <- renderValueBox({
+		val <- benefits_2020() %>%
+			{sum(.$current$income * 0.211)}
+		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 
+			"Total employer contribution", icon=icon("cogs"), color="yellow")
+	})
+
+	output$contributions_total <- renderValueBox({
+		val <- benefits_2020() %>%
+			{sum(.$current$income * (0.096+0.211))}
+		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 
+			"Employee + employer contributions", icon=icon("cogs"), color="yellow")
+	})
+
 }
 
