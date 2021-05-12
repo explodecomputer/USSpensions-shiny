@@ -332,7 +332,7 @@ model_2020b <- function()
 		column(width=2,
 			fluidRow(box(title="Proposed scenario 2a", width=12, collapsible = TRUE, collapsed = TRUE,
 				p("This column shows the projected pension value under 2020 valuation scenario 2a"),
-				p("It applies DB pension with accrual rate of 1/170, and a DC pension after salary reaches £40,000 towards which employees contribute 12% and employees contribute 0%.")
+				p("It applies DB pension with accrual rate of 1/170, and a DC pension after salary reaches £40,000 towards which employees contribute 12% and employers contribute 0%.")
 			)),
 			fluidRow(valueBoxOutput("scenario2a_income", width=12)),
 			fluidRow(valueBoxOutput("scenario2a_perc", width=12))
@@ -340,7 +340,7 @@ model_2020b <- function()
 		column(width=2,
 			fluidRow(box(title="Proposed scenario 2b", width=12, collapsible = TRUE, collapsed = TRUE,
 				p("This column shows the projected pension value under 2020 valuation scenario 2b"),
-				p("It applies DB pension with accrual rate of 1/165, and a DC pension after salary reaches £30,000 towards which employees contribute 12% and employees contribute 0%.")
+				p("It applies DB pension with accrual rate of 1/165, and a DC pension after salary reaches £30,000 towards which employees contribute 12% and employers contribute 0%.")
 			)),
 			fluidRow(valueBoxOutput("scenario2b_income", width=12)),
 			fluidRow(valueBoxOutput("scenario2b_perc", width=12))
@@ -348,7 +348,7 @@ model_2020b <- function()
 		column(width=2,
 			fluidRow(box(title="Proposed scenario 3a", width=12, collapsible = TRUE, collapsed = TRUE,
 				p("This column shows the projected pension value under 2020 valuation scenario 3a"),
-				p("It applies DB pension with accrual rate of 1/115, and a DC pension after salary reaches £40,000 towards which employees contribute 16% and employees contribute 0%.")
+				p("It applies DB pension with accrual rate of 1/115, and a DC pension after salary reaches £40,000 towards which employees contribute 16% and employers contribute 0%.")
 			)),
 			fluidRow(valueBoxOutput("scenario3a_income", width=12)),
 			fluidRow(valueBoxOutput("scenario3a_perc", width=12))
@@ -356,7 +356,7 @@ model_2020b <- function()
 		column(width=2,
 			fluidRow(box(title="Proposed scenario 3b", width=12, collapsible = TRUE, collapsed = TRUE,
 				p("This column shows the projected pension value under 2020 valuation scenario 3b"),
-				p("It applies DB pension with accrual rate of 1/110, and a DC pension after salary reaches £30,000 towards which employees contribute 16% and employees contribute 0%.")
+				p("It applies DB pension with accrual rate of 1/110, and a DC pension after salary reaches £30,000 towards which employees contribute 16% and employers contribute 0%.")
 			)),
 			fluidRow(valueBoxOutput("scenario3b_income", width=12)),
 			fluidRow(valueBoxOutput("scenario3b_perc", width=12))
@@ -386,7 +386,7 @@ model_2020c <- function()
 		column(width=2,
 			fluidRow(box(title="Proposed scenario 2a", width=12, collapsible = TRUE, collapsed = TRUE,
 				p("This column shows the projected pension value under 2020 valuation scenario 2a"),
-				p("It applies DB pension with accrual rate of 1/170, and a DC pension after salary reaches £40,000 towards which employees contribute 12% and employees contribute 0%.")
+				p("It applies DB pension with accrual rate of 1/170, and a DC pension after salary reaches £40,000 towards which employees contribute 12% and employers contribute 0%.")
 			)),
 			fluidRow(valueBoxOutput("scenario2a_pot", width=12)),
 			fluidRow(valueBoxOutput("scenario2a_pot_perc", width=12)),
@@ -395,7 +395,7 @@ model_2020c <- function()
 		column(width=2,
 			fluidRow(box(title="Proposed scenario 2b", width=12, collapsible = TRUE, collapsed = TRUE,
 				p("This column shows the projected pension value under 2020 valuation scenario 2b"),
-				p("It applies DB pension with accrual rate of 1/165, and a DC pension after salary reaches £30,000 towards which employees contribute 12% and employees contribute 0%.")
+				p("It applies DB pension with accrual rate of 1/165, and a DC pension after salary reaches £30,000 towards which employees contribute 12% and employers contribute 0%.")
 			)),
 			fluidRow(valueBoxOutput("scenario2b_pot", width=12)),
 			fluidRow(valueBoxOutput("scenario2b_pot_perc", width=12)),
@@ -404,7 +404,7 @@ model_2020c <- function()
 		column(width=2,
 			fluidRow(box(title="Proposed scenario 3a", width=12, collapsible = TRUE, collapsed = TRUE,
 				p("This column shows the projected pension value under 2020 valuation scenario 3a"),
-				p("It applies DB pension with accrual rate of 1/115, and a DC pension after salary reaches £40,000 towards which employees contribute 16% and employees contribute 0%.")
+				p("It applies DB pension with accrual rate of 1/115, and a DC pension after salary reaches £40,000 towards which employees contribute 16% and employers contribute 0%.")
 			)),
 			fluidRow(valueBoxOutput("scenario3a_pot", width=12)),
 			fluidRow(valueBoxOutput("scenario3a_pot_perc", width=12)),
@@ -413,7 +413,7 @@ model_2020c <- function()
 		column(width=2,
 			fluidRow(box(title="Proposed scenario 3b", width=12, collapsible = TRUE, collapsed = TRUE,
 				p("This column shows the projected pension value under 2020 valuation scenario 3b"),
-				p("It applies DB pension with accrual rate of 1/110, and a DC pension after salary reaches £30,000 towards which employees contribute 16% and employees contribute 0%.")
+				p("It applies DB pension with accrual rate of 1/110, and a DC pension after salary reaches £30,000 towards which employees contribute 16% and employers contribute 0%.")
 			)),
 			fluidRow(valueBoxOutput("scenario3b_pot", width=12)),
 			fluidRow(valueBoxOutput("scenario3b_pot_perc", width=12)),
