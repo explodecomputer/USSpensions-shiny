@@ -276,6 +276,111 @@ server <- function(input, output)
 		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 
 			"Projected total pension value", icon=icon("list"), color="purple")
 	})
+	
+	output$uuk1_income <- renderValueBox({
+	  val <- benefits_2020_summary() %>%
+	    filter(scenario == "uuk1") %>%
+	    {.$total_pension}
+	  valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"),
+	           "Projected annual income", icon=icon("list"), color="red")
+	})
+	
+	output$uuk1_pot <- renderValueBox({
+	  val <- benefits_2020_summary() %>%
+	    filter(scenario == "uuk1") %>%
+	    {.$total_pot}
+	  valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"),
+	           "Projected total pension value", icon=icon("list"), color="red")
+	})
+	
+	output$uuk1_perc <- renderValueBox({
+	  val1 <- benefits_2020_summary() %>%
+	    filter(scenario == "uuk1") %>%
+	    {.$total_pension}
+	  val2 <- benefits_2020_summary() %>%
+	    filter(scenario == "current") %>%
+	    {.$total_pension}
+	  val <- (val1-val2)/val2 * 100
+	  valueBox(paste0(format(round(val), big.mark=","), "%"),
+	           "Compared to current scheme", icon=icon("cogs"), color="red")
+	})
+	
+	output$uuk1_pot_perc <- renderValueBox({
+	  val1 <- benefits_2020_summary() %>%
+	    filter(scenario == "uuk1") %>%
+	    {.$total_pot}
+	  val2 <- benefits_2020_summary() %>%
+	    filter(scenario == "current") %>%
+	    {.$total_pot}
+	  val <- (val1-val2)/val2 * 100
+	  valueBox(paste0(format(round(val), big.mark=","), "%"),
+	           "Compared to current scheme", icon=icon("cogs"), color="red")
+	})
+	
+	output$uuk1_pot_diff <- renderValueBox({
+	  val1 <- benefits_2020_summary() %>%
+	    filter(scenario == "uuk1") %>%
+	    {.$total_pot}
+	  val2 <- benefits_2020_summary() %>%
+	    filter(scenario == "current") %>%
+	    {.$total_pot}
+	  val <- val1-val2
+	  valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"),
+	           "Compared to current scheme", icon=icon("cogs"), color="red")
+	})
+	
+	
+	output$uuk2_income <- renderValueBox({
+	  val <- benefits_2020_summary() %>%
+	    filter(scenario == "uuk2") %>%
+	    {.$total_pension}
+	  valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"),
+	           "Projected annual income", icon=icon("list"), color="red")
+	})
+	
+	output$uuk2_pot <- renderValueBox({
+	  val <- benefits_2020_summary() %>%
+	    filter(scenario == "uuk2") %>%
+	    {.$total_pot}
+	  valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"),
+	           "Projected total pension value", icon=icon("list"), color="red")
+	})
+	
+	output$uuk2_perc <- renderValueBox({
+	  val1 <- benefits_2020_summary() %>%
+	    filter(scenario == "uuk2") %>%
+	    {.$total_pension}
+	  val2 <- benefits_2020_summary() %>%
+	    filter(scenario == "current") %>%
+	    {.$total_pension}
+	  val <- (val1-val2)/val2 * 100
+	  valueBox(paste0(format(round(val), big.mark=","), "%"),
+	           "Compared to current scheme", icon=icon("cogs"), color="red")
+	})
+	
+	output$uuk2_pot_perc <- renderValueBox({
+	  val1 <- benefits_2020_summary() %>%
+	    filter(scenario == "uuk2") %>%
+	    {.$total_pot}
+	  val2 <- benefits_2020_summary() %>%
+	    filter(scenario == "current") %>%
+	    {.$total_pot}
+	  val <- (val1-val2)/val2 * 100
+	  valueBox(paste0(format(round(val), big.mark=","), "%"),
+	           "Compared to current scheme", icon=icon("cogs"), color="red")
+	})
+	
+	output$uuk2_pot_diff <- renderValueBox({
+	  val1 <- benefits_2020_summary() %>%
+	    filter(scenario == "uuk2") %>%
+	    {.$total_pot}
+	  val2 <- benefits_2020_summary() %>%
+	    filter(scenario == "current") %>%
+	    {.$total_pot}
+	  val <- val1-val2
+	  valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"),
+	           "Compared to current scheme", icon=icon("cogs"), color="red")
+	})
 
 	output$scenario1_income <- renderValueBox({
 		val <- benefits_2020_summary() %>%
