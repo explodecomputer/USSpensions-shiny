@@ -671,6 +671,9 @@ about_tab <- function()
 changelog_tab <- function()
 {
 	tabItem(tabName="changelog",
+		fluidRow(box(width=12, title="14th May 2021",
+			p("Added inflation assumptions, and replaced previous USS proposals with more recent UUK proposals")
+		)),
 		fluidRow(box(width=12, title="21st Apr 2021",
 			p("Updated 2020 valuation model - previously we were just estimating the change in contributions, but now we are projecting the pensions as in the 2018 model")
 		)),
