@@ -643,21 +643,21 @@ server <- function(input, output)
 	})
 
 	# contributions
-	output$contributions_employee <- renderValueBox({
+	output$contributions_employee_uuk <- output$contributions_employee_uss <- renderValueBox({
 		val <- benefits_2020() %>%
 			{sum(.$current$income * 0.096)}
 		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 
 			"Total employee contribution", icon=icon("cogs"), color="yellow")
 	})
 
-	output$contributions_employer <- renderValueBox({
+	output$contributions_employer_uuk <- output$contributions_employer_uss <- renderValueBox({
 		val <- benefits_2020() %>%
 			{sum(.$current$income * 0.211)}
 		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 
 			"Total employer contribution", icon=icon("cogs"), color="yellow")
 	})
 
-	output$contributions_total <- renderValueBox({
+	output$contributions_total_uuk <- output$contributions_total_uss <- renderValueBox({
 		val <- benefits_2020() %>%
 			{sum(.$current$income * (0.096+0.211))}
 		valueBox(tags$p(paste0("£", format(round(val), big.mark=",")), style="font-size:75%;"), 

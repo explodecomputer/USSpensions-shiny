@@ -293,11 +293,33 @@ model_2018_details <- function()
 model_2020_uuk <- function()
 {
   div(
-    p("We present projections of your future pension income from Defined Benefit (where you accrue income each year) and Defined Contribution (where you have your own investment) and the total value of benefits, including lump sum, based on the assumptions used in the USS 2020 valuation. Five scenarios were presented (1, 2a, 2b, 3a, 3b), click the '+' button to get a brief description for each. A comparison is provided against projections based on the current deal. More information in the Details tab."),
+    p("We present projections of your future pension income from Defined Benefit (where you accrue income each year) and Defined Contribution (where you have your own investment) and the total value of benefits, including lump sum, based on the assumptions used in the USS 2020 valuation."),
+    p("Five scenarios were previously presented by the USS, and since then UUK has made two counter-proposals. We show the UUK proposals here. Click the '+' button to get a brief description for each. A comparison is provided against projections based on the current deal. More information in the Details tab."),
     tags$hr(),
     h3("Contributions"),
     p("Currently employees make a pension contribution of 9.6% of their income and employers contribute 21.1%. Assuming these contribution rates remain fixed, projections for the total contributions are provided below."),
-    model_2020d(),
+    model_2020d_uuk(),
+    tags$hr(),
+    h3("Total pension value projections"),
+    p("Assuming the contribution rates above remain fixed over time, the following estimates are based on the fraction of the contributions that are allocated towards the DC component of the pension, and other assumptions such as UUK's proposed investment returns."),
+    model_2020c_uuk(),
+    tags$hr(),
+    h3("Annual income projections"),
+    model_2020b_uuk(),
+    tags$hr()
+  )
+}
+
+
+model_2020_uss <- function()
+{
+  div(
+    p("We present projections of your future pension income from Defined Benefit (where you accrue income each year) and Defined Contribution (where you have your own investment) and the total value of benefits, including lump sum, based on the assumptions used in the USS 2020 valuation."),
+    p("Below are the five scenarios initially presented by the USS as part of the 2020 valuation. Click the '+' button to get a brief description for each. A comparison is provided against projections based on the current deal. More information in the Details tab."),
+    tags$hr(),
+    h3("Contributions"),
+    p("Currently employees make a pension contribution of 9.6% of their income and employers contribute 21.1%. Assuming these contribution rates remain fixed, projections for the total contributions are provided below."),
+    model_2020d_uss(),
     tags$hr(),
     h3("Total pension value projections"),
     p("Assuming the contribution rates above remain fixed over time, the following estimates are based on the fraction of the contributions that are allocated towards the DC component of the pension, and other assumptions such as UUK's proposed investment returns."),
@@ -347,7 +369,7 @@ model_2020b_uuk <- function()
                         p("This column shows the projected pension value under the current scheme"),
                         p("The current scheme uses a defined benefits scheme (DB) up to an income threshold of £59,883, and applies a defined contributions (DC) scheme to income above this threshold."))
            ),
-           fluidRow(valueBoxOutput("current_income", width=12)),
+           fluidRow(valueBoxOutput("current_income", width=12))
     ),
     column(width=4,
            fluidRow(box(title="UUK Proposal 1", width=12, collapsible = TRUE, collapsed = TRUE,
@@ -497,12 +519,21 @@ model_2020b_uuk <- function()
 # 	)
 # }
 
-model_2020d <- function()
+model_2020d_uss <- function()
 {
 	fluidRow(
-		valueBoxOutput("contributions_employee", width=3),
-		valueBoxOutput("contributions_employer", width=3),
-		valueBoxOutput("contributions_total", width=3)
+		valueBoxOutput("contributions_employee_uss", width=3),
+		valueBoxOutput("contributions_employer_uss", width=3),
+		valueBoxOutput("contributions_total_uss", width=3)
+	)
+}
+
+model_2020d_uuk <- function()
+{
+	fluidRow(
+		valueBoxOutput("contributions_employee_uuk", width=3),
+		valueBoxOutput("contributions_employer_uuk", width=3),
+		valueBoxOutput("contributions_total_uuk", width=3)
 	)
 }
 
@@ -553,9 +584,12 @@ dashboard2020_tab <- function()
 		column(width=9,
 			fluidRow(
 				tabBox(width=12,
-				       tabPanel("UUK Projections",
+				       tabPanel("UUK Proposals",
 				                model_2020_uuk()
 				       ),
+				      	# tabPanel("USS Proposals",
+				      	# 		model_2020_uss()
+				      	# ),
 					# tabPanel("Projections",
 					# 	model_2020()
 					# ),
@@ -616,7 +650,7 @@ about_tab <- function()
 		),
 		column(width=6,
 			fluidRow(box(width=12,title="Contact",
-				p("Model and website developed by Neil Davies", tags$a("neil.davies@bristol.ac.uk", href="mailto:neil.davies@bristol.ac.uk"), " and Gibran Hemani", tags$a("g.hemani@bristol.ac.uk", href="mailto:g.hemani@bristol.ac.uk")),
+				p("Model and website developed by Neil Davies", tags$a("neil.davies@bristol.ac.uk", href="mailto:neil.davies@bristol.ac.uk"), ", Gibran Hemani", tags$a("g.hemani@bristol.ac.uk", href="mailto:g.hemani@bristol.ac.uk"), " and Gareth Griffith", tags$a("gareth.griffith@bristol.ac.uk", href="mailto:gareth.griffith@bristol.ac.uk")),
 				p("We are not in any way affiliated with the USS."),
 				p("This model is provisional and we will try to update it as more information comes in and when we can."),
 				p("Please let us know if this modeller can be improved in any way."),
