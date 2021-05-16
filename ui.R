@@ -650,7 +650,7 @@ about_tab <- function()
 		),
 		column(width=6,
 			fluidRow(box(width=12,title="Contact",
-				p("Model and website developed by Neil Davies", tags$a("neil.davies@bristol.ac.uk", href="mailto:neil.davies@bristol.ac.uk"), ", Gibran Hemani", tags$a("g.hemani@bristol.ac.uk", href="mailto:g.hemani@bristol.ac.uk"), " and Gareth Griffith", tags$a("g.griffith@bristol.ac.uk", href="mailto:gareth.griffith@bristol.ac.uk")),
+				p("Model and website developed by Neil Davies", tags$a("neil.davies@bristol.ac.uk", href="mailto:neil.davies@bristol.ac.uk"), ", Gibran Hemani", tags$a("g.hemani@bristol.ac.uk", href="mailto:g.hemani@bristol.ac.uk"), " and Gareth Griffith", tags$a("g.griffith@bristol.ac.uk", href="mailto:g.griffith@bristol.ac.uk")),
 				p("We are not in any way affiliated with the USS."),
 				p("This model is provisional and we will try to update it as more information comes in and when we can."),
 				p("Please let us know if this modeller can be improved in any way."),
