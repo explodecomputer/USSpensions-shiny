@@ -49,13 +49,21 @@ inputs2020 <- function()
 		)
 	),
 	fluidRow(
-		box(title="Technical assumptions (see About page)", width=12,
+		box(title="Technical assumptions (see Details tab)", width=12,
 			fluidRow(
 				column(width=6,
 					numericInput("input_payinc", "Annual % change in pay (after CPI)", 2, min=0, max=100)
 				),
 				column(width=6,
 					numericInput("input_lei", "% Increase in life expectancy / year", 0.5, min=-100, max=100)
+				),
+				column(width=6,
+				       radioButtons("input_incr", "Inflation assumptions:", 
+				                    c("2.5% Cap, 1996-Present"="incr_sim_post96_2.5",
+				                      "5% Cap, 1996-Present"="incr_sim_post96_5",
+				                      "2.5% Cap, 1947-Present"="incr_sim_all_2.5",
+				                      "5% Cap, 1947-Present"="incr_sim_all_5"
+				                      ))
 				)
 			)
 		)
@@ -102,7 +110,7 @@ inputs2018 <- function()
 					),
 					column(width=6,
 						numericInput("input_lei18", "% Increase in life expectancy / year", 0.5, min=-100, max=100)
-					)
+					),
 				)
 			)
 		),
@@ -282,144 +290,250 @@ model_2018_details <- function()
 			))	)
 }
 
-model_2020 <- function()
+model_2020_uuk <- function()
 {
-	div(
-		p("We present projections of your future pension income from Defined Benefit (where you accrue income each year) and Defined Contribution (where you have your own investment) and the total value of benefits, including lump sum, based on the assumptions used in the USS 2020 valuation. Five scenarios were presented (1, 2a, 2b, 3a, 3b), click the '+' button to get a brief description for each. A comparison is provided against projections based on the current deal. More information in the Details tab."),
-		tags$hr(),
-		h3("Contributions"),
-		p("Currently employees make a pension contribution of 9.6% of their income and employers contribute 21.1%. Assuming these contribution rates remain fixed, projections for the total contributions are provided below."),
-		model_2020d(),
-		tags$hr(),
-		h3("Total pension value projections"),
-		p("Assuming the contribution rates above remain fixed over time, the following estimates are based on the fraction of the contributions that are allocated towards the DC component of the pension, and other assumptions such as USS's projected investment returns."),
-		model_2020c(),
-		tags$hr(),
-		h3("Annual income projections"),
-		model_2020b(),
-		tags$hr(),
-		p("The graph below shows the growth of the value of your pension over time across the various scenarios, including the current deal. The projected value of your final pension is the value at the right-most end of the x-axis - i.e. at in the projected year of your retirement."),
-		model_2020_plot()
+  div(
+    p("We present projections of your future pension income from Defined Benefit (where you accrue income each year) and Defined Contribution (where you have your own investment) and the total value of benefits, including lump sum, based on the assumptions used in the USS 2020 valuation."),
+    p("Five scenarios were previously presented by the USS, and since then UUK has made two counter-proposals. We show the UUK proposals here. Click the '+' button to get a brief description for each. A comparison is provided against projections based on the current deal. More information in the Details tab."),
+    tags$hr(),
+    h3("Contributions"),
+    p("Currently employees make a pension contribution of 9.6% of their income and employers contribute 21.1%. Assuming these contribution rates remain fixed, projections for the total contributions are provided below."),
+    model_2020d_uuk(),
+    tags$hr(),
+    h3("Total pension value projections"),
+    p("Assuming the contribution rates above remain fixed over time, the following estimates are based on the fraction of the contributions that are allocated towards the DC component of the pension, and other assumptions such as UUK's proposed investment returns."),
+    model_2020c_uuk(),
+    tags$hr(),
+    h3("Annual income projections"),
+    model_2020b_uuk(),
+    tags$hr()
+  )
+}
+
+
+model_2020_uss <- function()
+{
+  div(
+    p("We present projections of your future pension income from Defined Benefit (where you accrue income each year) and Defined Contribution (where you have your own investment) and the total value of benefits, including lump sum, based on the assumptions used in the USS 2020 valuation."),
+    p("Below are the five scenarios initially presented by the USS as part of the 2020 valuation. Click the '+' button to get a brief description for each. A comparison is provided against projections based on the current deal. More information in the Details tab."),
+    tags$hr(),
+    h3("Contributions"),
+    p("Currently employees make a pension contribution of 9.6% of their income and employers contribute 21.1%. Assuming these contribution rates remain fixed, projections for the total contributions are provided below."),
+    model_2020d_uss(),
+    tags$hr(),
+    h3("Total pension value projections"),
+    p("Assuming the contribution rates above remain fixed over time, the following estimates are based on the fraction of the contributions that are allocated towards the DC component of the pension, and other assumptions such as UUK's proposed investment returns."),
+    model_2020c_uuk(),
+    tags$hr(),
+    h3("Annual income projections"),
+    model_2020b_uuk(),
+    tags$hr()
+  )
+}
+
+model_2020c_uuk <- function()
+{fluidRow(
+  column(width=4,
+         fluidRow(box(title="Current Scheme", width=12, collapsible = TRUE, collapsed = TRUE,
+                      p("This column shows the projected pension value under the current scheme"),
+                      p("The current scheme uses a defined benefits scheme (DB) up to an income threshold of £59,883, and applies a defined contributions (DC) scheme to income above this threshold."))
+         ),
+         fluidRow(valueBoxOutput("current_pot", width=12)),
+  ),
+  column(width=4,
+         fluidRow(box(title="UUK Proposal 1", width=12, collapsible = TRUE, collapsed = TRUE,
+                      p("This column shows the projected pension value under UUK proposal 1"),
+                      p("This proposal applies DB pension contributions at 1/85th of salary until pot reaches £40,000, at which point it changes to a DC pension where employees contribute 9.6% and employers contribute 10.2%.")
+         )),
+         fluidRow(valueBoxOutput("uuk1_pot", width=12)),
+         fluidRow(valueBoxOutput("uuk1_pot_perc", width=12)),
+         fluidRow(valueBoxOutput("uuk1_pot_diff", width=12))
+  ),
+  column(width=4,
+         fluidRow(box(title="UUK Proposal 2", width=12, collapsible = TRUE, collapsed = TRUE,
+                      p("This column shows the projected pension value under UUK proposal 2"),
+                      p("This proposal applies DB pension contributions at 1/75th of salary until pot reaches £30,000, at which point it changes to a DC pension where employees contribute 9.6% and employers contribute 10.2%.")
+         )),
+         fluidRow(valueBoxOutput("uuk2_pot", width=12)),
+         fluidRow(valueBoxOutput("uuk2_pot_perc", width=12)),
+         fluidRow(valueBoxOutput("uuk2_pot_diff", width=12))
+  )			
+)
+}
+
+model_2020b_uuk <- function()
+{
+  fluidRow(
+    column(width=4,
+           fluidRow(box(title="Current scheme", width=12, collapsible = TRUE, collapsed = TRUE,
+                        p("This column shows the projected pension value under the current scheme"),
+                        p("The current scheme uses a defined benefits scheme (DB) up to an income threshold of £59,883, and applies a defined contributions (DC) scheme to income above this threshold."))
+           ),
+           fluidRow(valueBoxOutput("current_income", width=12))
+    ),
+    column(width=4,
+           fluidRow(box(title="UUK Proposal 1", width=12, collapsible = TRUE, collapsed = TRUE,
+                        p("This column shows the projected pension value under UUK proposal 1"),
+                        p("This proposal applies DB pension contributions at 1/85th of salary until pot reaches £40,000, at which point it changes to a DC pension where employees contribute 9.6% and employers contribute 10.2%.")
+           )),
+           fluidRow(valueBoxOutput("uuk1_income", width=12)),
+           fluidRow(valueBoxOutput("uuk1_perc", width=12))
+    ),
+    column(width=4,
+           fluidRow(box(title="UUK Proposal 2", width=12, collapsible = TRUE, collapsed = TRUE,
+                        p("This column shows the projected pension value under UUK proposal 2"),
+                        p("This proposal applies DB pension contributions at 1/75th of salary until pot reaches £30,000, at which point it changes to a DC pension where employees contribute 9.6% and employers contribute 10.2%.")
+           )),
+           fluidRow(valueBoxOutput("uuk2_income", width=12)),
+           fluidRow(valueBoxOutput("uuk2_perc", width=12))
+    )
+  )
+}
+
+
+# model_2020 <- function()
+# {
+# 	div(
+# 		p("We present projections of your future pension income from Defined Benefit (where you accrue income each year) and Defined Contribution (where you have your own investment) and the total value of benefits, including lump sum, based on the assumptions used in the USS 2020 valuation. Five scenarios were presented (1, 2a, 2b, 3a, 3b), click the '+' button to get a brief description for each. A comparison is provided against projections based on the current deal. More information in the Details tab."),
+# 		tags$hr(),
+# 		h3("Total pension value projections"),
+# 		p("Assuming the contribution rates above remain fixed over time, the following estimates are based on the fraction of the contributions that are allocated towards the DC component of the pension, and other assumptions such as USS's projected investment returns."),
+# 		model_2020c(),
+# 		tags$hr(),
+# 		h3("Annual income projections"),
+# 		model_2020b(),
+# 		tags$hr(),
+# 		p("The graph below shows the growth of the value of your pension over time across the various scenarios, including the current deal. The projected value of your final pension is the value at the right-most end of the x-axis - i.e. at in the projected year of your retirement."),
+# 		model_2020_plot()
+# 	)
+# }
+
+# model_2020b <- function()
+# {
+# 	fluidRow(
+# 		column(width=2,
+# 			fluidRow(box(title="Current scheme", width=12, collapsible = TRUE, collapsed = TRUE,
+# 				p("This column shows the projected pension value under the current scheme"),
+# 				p("The current scheme uses a defined benifits scheme (DB) up to an income threshold of £59,883, and applies a defined contributions (DC) scheme to income above this threshold."))
+# 			),
+# 			fluidRow(valueBoxOutput("current_income", width=12)),
+# 		),
+# 		column(width=2,
+# 			fluidRow(box(title="Proposed scenario 1", width=12, collapsible = TRUE, collapsed = TRUE,
+# 				p("This column shows the projected pension value under 2020 valuation scenario 1"),
+# 				p("It eliminates the DB proportion (essentially setting it to 0), so the entire pension comes from the DC pension with employee contributions of 9.6% and employer contributions of 1.8%")
+# 			)),
+# 			fluidRow(valueBoxOutput("scenario1_income", width=12)),
+# 			fluidRow(valueBoxOutput("scenario1_perc", width=12))
+# 		),
+# 		column(width=2,
+# 			fluidRow(box(title="Proposed scenario 2a", width=12, collapsible = TRUE, collapsed = TRUE,
+# 				p("This column shows the projected pension value under 2020 valuation scenario 2a"),
+# 				p("It applies DB pension with accrual rate of 1/170, and a DC pension after salary reaches £40,000 towards which employees contribute 12% and employees contribute 0%.")
+# 			)),
+# 			fluidRow(valueBoxOutput("scenario2a_income", width=12)),
+# 			fluidRow(valueBoxOutput("scenario2a_perc", width=12))
+# 		),
+# 		column(width=2,
+# 			fluidRow(box(title="Proposed scenario 2b", width=12, collapsible = TRUE, collapsed = TRUE,
+# 				p("This column shows the projected pension value under 2020 valuation scenario 2b"),
+# 				p("It applies DB pension with accrual rate of 1/165, and a DC pension after salary reaches £30,000 towards which employees contribute 12% and employees contribute 0%.")
+# 			)),
+# 			fluidRow(valueBoxOutput("scenario2b_income", width=12)),
+# 			fluidRow(valueBoxOutput("scenario2b_perc", width=12))
+# 		),
+# 		column(width=2,
+# 			fluidRow(box(title="Proposed scenario 3a", width=12, collapsible = TRUE, collapsed = TRUE,
+# 				p("This column shows the projected pension value under 2020 valuation scenario 3a"),
+# 				p("It applies DB pension with accrual rate of 1/115, and a DC pension after salary reaches £40,000 towards which employees contribute 16% and employees contribute 0%.")
+# 			)),
+# 			fluidRow(valueBoxOutput("scenario3a_income", width=12)),
+# 			fluidRow(valueBoxOutput("scenario3a_perc", width=12))
+# 		),
+# 		column(width=2,
+# 			fluidRow(box(title="Proposed scenario 3b", width=12, collapsible = TRUE, collapsed = TRUE,
+# 				p("This column shows the projected pension value under 2020 valuation scenario 3b"),
+# 				p("It applies DB pension with accrual rate of 1/110, and a DC pension after salary reaches £30,000 towards which employees contribute 16% and employees contribute 0%.")
+# 			)),
+# 			fluidRow(valueBoxOutput("scenario3b_income", width=12)),
+# 			fluidRow(valueBoxOutput("scenario3b_perc", width=12))
+# 		)				
+# 	)
+# }
+# 
+# model_2020c <- function()
+# {
+# 	fluidRow(
+# 		# column(width=2,
+# 		# 	fluidRow(box(title="Current scheme", width=12, collapsible = TRUE, collapsed = TRUE,
+# 		# 		p("This column shows the projected pension value under the current scheme"),
+# 		# 		p("The current scheme uses a defined benifits scheme (DB) up to an income threshold of £59,883, and applies a defined contributions (DC) scheme to income above this threshold."))
+# 		# 	),
+# 		# 	fluidRow(valueBoxOutput("current_pot", width=12)),
+# 		# ),
+# 		column(width=2,
+# 			fluidRow(box(title="Proposed scenario 1", width=12, collapsible = TRUE, collapsed = TRUE,
+# 				p("This column shows the projected pension value under 2020 valuation scenario 1"),
+# 				p("It eliminates the DB proportion (essentially setting it to 0), so the entire pension comes from the DC pension with employee contributions of 9.6% and employer contributions of 1.8%")
+# 			)),
+# 			fluidRow(valueBoxOutput("scenario1_pot", width=12)),
+# 			fluidRow(valueBoxOutput("scenario1_pot_perc", width=12)),
+# 			fluidRow(valueBoxOutput("scenario1_pot_diff", width=12))
+# 		),
+# 		column(width=2,
+# 			fluidRow(box(title="Proposed scenario 2a", width=12, collapsible = TRUE, collapsed = TRUE,
+# 				p("This column shows the projected pension value under 2020 valuation scenario 2a"),
+# 				p("It applies DB pension with accrual rate of 1/170, and a DC pension after salary reaches £40,000 towards which employees contribute 12% and employees contribute 0%.")
+# 			)),
+# 			fluidRow(valueBoxOutput("scenario2a_pot", width=12)),
+# 			fluidRow(valueBoxOutput("scenario2a_pot_perc", width=12)),
+# 			fluidRow(valueBoxOutput("scenario2a_pot_diff", width=12))
+# 		),
+# 		column(width=2,
+# 			fluidRow(box(title="Proposed scenario 2b", width=12, collapsible = TRUE, collapsed = TRUE,
+# 				p("This column shows the projected pension value under 2020 valuation scenario 2b"),
+# 				p("It applies DB pension with accrual rate of 1/165, and a DC pension after salary reaches £30,000 towards which employees contribute 12% and employees contribute 0%.")
+# 			)),
+# 			fluidRow(valueBoxOutput("scenario2b_pot", width=12)),
+# 			fluidRow(valueBoxOutput("scenario2b_pot_perc", width=12)),
+# 			fluidRow(valueBoxOutput("scenario2b_pot_diff", width=12))
+# 		),
+# 		column(width=2,
+# 			fluidRow(box(title="Proposed scenario 3a", width=12, collapsible = TRUE, collapsed = TRUE,
+# 				p("This column shows the projected pension value under 2020 valuation scenario 3a"),
+# 				p("It applies DB pension with accrual rate of 1/115, and a DC pension after salary reaches £40,000 towards which employees contribute 16% and employees contribute 0%.")
+# 			)),
+# 			fluidRow(valueBoxOutput("scenario3a_pot", width=12)),
+# 			fluidRow(valueBoxOutput("scenario3a_pot_perc", width=12)),
+# 			fluidRow(valueBoxOutput("scenario3a_pot_diff", width=12))
+# 		),
+# 		column(width=2,
+# 			fluidRow(box(title="Proposed scenario 3b", width=12, collapsible = TRUE, collapsed = TRUE,
+# 				p("This column shows the projected pension value under 2020 valuation scenario 3b"),
+# 				p("It applies DB pension with accrual rate of 1/110, and a DC pension after salary reaches £30,000 towards which employees contribute 16% and employees contribute 0%.")
+# 			)),
+# 			fluidRow(valueBoxOutput("scenario3b_pot", width=12)),
+# 			fluidRow(valueBoxOutput("scenario3b_pot_perc", width=12)),
+# 			fluidRow(valueBoxOutput("scenario3b_pot_diff", width=12))
+# 		)				
+# 	)
+# }
+
+model_2020d_uss <- function()
+{
+	fluidRow(
+		valueBoxOutput("contributions_employee_uss", width=3),
+		valueBoxOutput("contributions_employer_uss", width=3),
+		valueBoxOutput("contributions_total_uss", width=3)
 	)
 }
 
-model_2020b <- function()
+model_2020d_uuk <- function()
 {
 	fluidRow(
-		column(width=2,
-			fluidRow(box(title="Current scheme", width=12, collapsible = TRUE, collapsed = TRUE,
-				p("This column shows the projected pension value under the current scheme"),
-				p("The current scheme uses a defined benifits scheme (DB) up to an income threshold of £59,883, and applies a defined contributions (DC) scheme to income above this threshold."))
-			),
-			fluidRow(valueBoxOutput("current_income", width=12)),
-		),
-		column(width=2,
-			fluidRow(box(title="Proposed scenario 1", width=12, collapsible = TRUE, collapsed = TRUE,
-				p("This column shows the projected pension value under 2020 valuation scenario 1"),
-				p("It eliminates the DB proportion (essentially setting it to 0), so the entire pension comes from the DC pension with employee contributions of 9.6% and employer contributions of 1.8%")
-			)),
-			fluidRow(valueBoxOutput("scenario1_income", width=12)),
-			fluidRow(valueBoxOutput("scenario1_perc", width=12))
-		),
-		column(width=2,
-			fluidRow(box(title="Proposed scenario 2a", width=12, collapsible = TRUE, collapsed = TRUE,
-				p("This column shows the projected pension value under 2020 valuation scenario 2a"),
-				p("It applies DB pension with accrual rate of 1/170, and a DC pension after salary reaches £40,000 towards which employees contribute 12% and employees contribute 0%.")
-			)),
-			fluidRow(valueBoxOutput("scenario2a_income", width=12)),
-			fluidRow(valueBoxOutput("scenario2a_perc", width=12))
-		),
-		column(width=2,
-			fluidRow(box(title="Proposed scenario 2b", width=12, collapsible = TRUE, collapsed = TRUE,
-				p("This column shows the projected pension value under 2020 valuation scenario 2b"),
-				p("It applies DB pension with accrual rate of 1/165, and a DC pension after salary reaches £30,000 towards which employees contribute 12% and employees contribute 0%.")
-			)),
-			fluidRow(valueBoxOutput("scenario2b_income", width=12)),
-			fluidRow(valueBoxOutput("scenario2b_perc", width=12))
-		),
-		column(width=2,
-			fluidRow(box(title="Proposed scenario 3a", width=12, collapsible = TRUE, collapsed = TRUE,
-				p("This column shows the projected pension value under 2020 valuation scenario 3a"),
-				p("It applies DB pension with accrual rate of 1/115, and a DC pension after salary reaches £40,000 towards which employees contribute 16% and employees contribute 0%.")
-			)),
-			fluidRow(valueBoxOutput("scenario3a_income", width=12)),
-			fluidRow(valueBoxOutput("scenario3a_perc", width=12))
-		),
-		column(width=2,
-			fluidRow(box(title="Proposed scenario 3b", width=12, collapsible = TRUE, collapsed = TRUE,
-				p("This column shows the projected pension value under 2020 valuation scenario 3b"),
-				p("It applies DB pension with accrual rate of 1/110, and a DC pension after salary reaches £30,000 towards which employees contribute 16% and employees contribute 0%.")
-			)),
-			fluidRow(valueBoxOutput("scenario3b_income", width=12)),
-			fluidRow(valueBoxOutput("scenario3b_perc", width=12))
-		)				
-	)
-}
-
-model_2020c <- function()
-{
-	fluidRow(
-		column(width=2,
-			fluidRow(box(title="Current scheme", width=12, collapsible = TRUE, collapsed = TRUE,
-				p("This column shows the projected pension value under the current scheme"),
-				p("The current scheme uses a defined benifits scheme (DB) up to an income threshold of £59,883, and applies a defined contributions (DC) scheme to income above this threshold."))
-			),
-			fluidRow(valueBoxOutput("current_pot", width=12)),
-		),
-		column(width=2,
-			fluidRow(box(title="Proposed scenario 1", width=12, collapsible = TRUE, collapsed = TRUE,
-				p("This column shows the projected pension value under 2020 valuation scenario 1"),
-				p("It eliminates the DB proportion (essentially setting it to 0), so the entire pension comes from the DC pension with employee contributions of 9.6% and employer contributions of 1.8%")
-			)),
-			fluidRow(valueBoxOutput("scenario1_pot", width=12)),
-			fluidRow(valueBoxOutput("scenario1_pot_perc", width=12)),
-			fluidRow(valueBoxOutput("scenario1_pot_diff", width=12))
-		),
-		column(width=2,
-			fluidRow(box(title="Proposed scenario 2a", width=12, collapsible = TRUE, collapsed = TRUE,
-				p("This column shows the projected pension value under 2020 valuation scenario 2a"),
-				p("It applies DB pension with accrual rate of 1/170, and a DC pension after salary reaches £40,000 towards which employees contribute 12% and employees contribute 0%.")
-			)),
-			fluidRow(valueBoxOutput("scenario2a_pot", width=12)),
-			fluidRow(valueBoxOutput("scenario2a_pot_perc", width=12)),
-			fluidRow(valueBoxOutput("scenario2a_pot_diff", width=12))
-		),
-		column(width=2,
-			fluidRow(box(title="Proposed scenario 2b", width=12, collapsible = TRUE, collapsed = TRUE,
-				p("This column shows the projected pension value under 2020 valuation scenario 2b"),
-				p("It applies DB pension with accrual rate of 1/165, and a DC pension after salary reaches £30,000 towards which employees contribute 12% and employees contribute 0%.")
-			)),
-			fluidRow(valueBoxOutput("scenario2b_pot", width=12)),
-			fluidRow(valueBoxOutput("scenario2b_pot_perc", width=12)),
-			fluidRow(valueBoxOutput("scenario2b_pot_diff", width=12))
-		),
-		column(width=2,
-			fluidRow(box(title="Proposed scenario 3a", width=12, collapsible = TRUE, collapsed = TRUE,
-				p("This column shows the projected pension value under 2020 valuation scenario 3a"),
-				p("It applies DB pension with accrual rate of 1/115, and a DC pension after salary reaches £40,000 towards which employees contribute 16% and employees contribute 0%.")
-			)),
-			fluidRow(valueBoxOutput("scenario3a_pot", width=12)),
-			fluidRow(valueBoxOutput("scenario3a_pot_perc", width=12)),
-			fluidRow(valueBoxOutput("scenario3a_pot_diff", width=12))
-		),
-		column(width=2,
-			fluidRow(box(title="Proposed scenario 3b", width=12, collapsible = TRUE, collapsed = TRUE,
-				p("This column shows the projected pension value under 2020 valuation scenario 3b"),
-				p("It applies DB pension with accrual rate of 1/110, and a DC pension after salary reaches £30,000 towards which employees contribute 16% and employees contribute 0%.")
-			)),
-			fluidRow(valueBoxOutput("scenario3b_pot", width=12)),
-			fluidRow(valueBoxOutput("scenario3b_pot_perc", width=12)),
-			fluidRow(valueBoxOutput("scenario3b_pot_diff", width=12))
-		)				
-	)
-}
-
-model_2020d <- function()
-{
-	fluidRow(
-		valueBoxOutput("contributions_employee", width=3),
-		valueBoxOutput("contributions_employer", width=3),
-		valueBoxOutput("contributions_total", width=3)
+		valueBoxOutput("contributions_employee_uuk", width=3),
+		valueBoxOutput("contributions_employer_uuk", width=3),
+		valueBoxOutput("contributions_total_uuk", width=3)
 	)
 }
 
@@ -452,7 +566,11 @@ fluidRow(
 		p("The USS valuation documents assume a 1.6% and 1.8% improvements for women and men in mortality per year based on Continuous Mortality Investigation."),
 		p("This model uses an estimate of change in life expectancy at age 65 from the ONS: https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/lifeexpectancies/datasets/expectationoflifeprincipalprojectionunitedkingdom")
 	),
-		
+	box(title="Inflation Assumptions", width=12,
+	    p("Inflation is estimated in the modeller by randomly drawing estimates from the distribution of ", tags$a("observed inflation rates", href=" https://https://www.ons.gov.uk/economy/inflationandpriceindices/datasets/consumerpriceindices"), "after the inflation cap implemented in 1996. Forecasted rates from this distribution are capped at 2.5%."),
+	    p("Options to vary this are presented, which include: Altering the cap on inflation to 5%, altering the assumption that post-96 inflation rates are more likely to be observed than rates between 1947 and 1996. Full details of the calculations can be found ", tags$a("here.", href="https://github.com/explodecomputer/USSpensions/blob/master/misc/get_cpi.r")
+	    )
+	),
 	box(title="Differences by gender", width=12,
 		p("Insurance companies cannot discriminate against individuals because of gender. The differences in annuity rates between men and women is driven by the age of spouse. We assume the male spouse is 3 years older. The annuity assumptions can be changed on the annuity tab.")
 	)
@@ -466,9 +584,15 @@ dashboard2020_tab <- function()
 		column(width=9,
 			fluidRow(
 				tabBox(width=12,
-					tabPanel("Projections",
-						model_2020()
-					),
+				       tabPanel("UUK Proposals",
+				                model_2020_uuk()
+				       ),
+				      	# tabPanel("USS Proposals",
+				      	# 		model_2020_uss()
+				      	# ),
+					# tabPanel("Projections",
+					# 	model_2020()
+					# ),
 					tabPanel("Details",
 						model_2020_details()
 					)
@@ -526,7 +650,7 @@ about_tab <- function()
 		),
 		column(width=6,
 			fluidRow(box(width=12,title="Contact",
-				p("Model and website developed by Neil Davies", tags$a("neil.davies@bristol.ac.uk", href="mailto:neil.davies@bristol.ac.uk"), " and Gibran Hemani", tags$a("g.hemani@bristol.ac.uk", href="mailto:g.hemani@bristol.ac.uk")),
+				p("Model and website developed by Neil Davies", tags$a("neil.davies@bristol.ac.uk", href="mailto:neil.davies@bristol.ac.uk"), ", Gibran Hemani", tags$a("g.hemani@bristol.ac.uk", href="mailto:g.hemani@bristol.ac.uk"), " and Gareth Griffith", tags$a("gareth.griffith@bristol.ac.uk", href="mailto:gareth.griffith@bristol.ac.uk")),
 				p("We are not in any way affiliated with the USS."),
 				p("This model is provisional and we will try to update it as more information comes in and when we can."),
 				p("Please let us know if this modeller can be improved in any way."),
@@ -547,6 +671,9 @@ about_tab <- function()
 changelog_tab <- function()
 {
 	tabItem(tabName="changelog",
+		fluidRow(box(width=12, title="14th May 2021",
+			p("Added inflation assumptions, and replaced previous USS proposals with more recent UUK proposals")
+		)),
 		fluidRow(box(width=12, title="21st Apr 2021",
 			p("Updated 2020 valuation model - previously we were just estimating the change in contributions, but now we are projecting the pensions as in the 2018 model")
 		)),
