@@ -295,6 +295,7 @@ model_2020_uuk <- function()
   div(
     p("We present projections of your future pension income from Defined Benefit (where you accrue income each year) and Defined Contribution (where you have your own investment) and the total value of benefits, including lump sum, based on the assumptions used in the USS 2020 valuation."),
     p("Five scenarios were previously presented by the USS, and since then UUK has made two counter-proposals. We show the UUK proposals here. Click the '+' button to get a brief description for each. A comparison is provided against projections based on the current deal. More information in the Details tab."),
+    p(tags$strong("NB. None of the proposals affect past benefits - pension values that have already accumulated are not going to be affected")),
     tags$hr(),
     h3("Contributions"),
     p("Currently employees make a pension contribution of 9.6% of their income and employers contribute 21.1%. Assuming these contribution rates remain fixed, projections for the total contributions are provided below."),
