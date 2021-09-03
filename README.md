@@ -62,7 +62,7 @@ cd USSpensions-shiny
 
 Updating when image updates:
 
-1. List existing pods `kubectl get pods`
-2. Delete each of them `kubectl delete pod uss-pensions-shiny-deployment-<somehash>`
+1. List existing pods `kubectl get deployments`
+2. Delete each of them `kubectl delete deployment uss-pensions-shiny-deployment`
 
 They should be automatically replaced

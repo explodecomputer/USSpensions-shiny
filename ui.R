@@ -36,7 +36,7 @@ inputs2020 <- function()
 		box(title="Your details", width=12,
 			fluidRow(
 				column(width=6,
-					numericInput("input_income", "Income (£):", 35000, min=0, max=1000000)
+					numericInput("input_income", "Income before tax (£):", 35000, min=0, max=1000000)
 				),
 				column(width=6,
 					dateInput("input_dob", "Date of birth:", value="1984-09-06")
@@ -294,7 +294,7 @@ model_2020_uuk <- function()
 {
   div(
     p("We present projections of your future pension income from Defined Benefit (where you accrue income each year) and Defined Contribution (where you have your own investment) and the total value of benefits, including lump sum, based on the assumptions used in the USS 2020 valuation."),
-    p("Five scenarios were previously presented by the USS, and since then UUK has made two counter-proposals. We show the UUK proposals here. Click the '+' button to get a brief description for each. A comparison is provided against projections based on the current deal. More information in the Details tab."),
+    p("Five scenarios were previously presented by the USS, and since then UUK has made two counter-proposals. The first of those counter proposals has now been pushed through the JNC. We show the UUK counter proposal here. Click the '+' button to get a brief description. A comparison is provided against projections based on the current deal. More information in the Details tab."),
     p(tags$strong("NB. None of the proposals affect past benefits - pension values that have already accumulated are not going to be affected")),
     tags$hr(),
     h3("Contributions"),
@@ -334,30 +334,21 @@ model_2020_uss <- function()
 
 model_2020c_uuk <- function()
 {fluidRow(
-  column(width=4,
+  column(width=6,
          fluidRow(box(title="Current Scheme", width=12, collapsible = TRUE, collapsed = TRUE,
                       p("This column shows the projected pension value under the current scheme"),
                       p("The current scheme uses a defined benefits scheme (DB) up to an income threshold of £59,883, and applies a defined contributions (DC) scheme to income above this threshold."))
          ),
          fluidRow(valueBoxOutput("current_pot", width=12)),
   ),
-  column(width=4,
-         fluidRow(box(title="UUK Proposal 1", width=12, collapsible = TRUE, collapsed = TRUE,
+  column(width=6,
+         fluidRow(box(title="UUK Proposal", width=12, collapsible = TRUE, collapsed = TRUE,
                       p("This column shows the projected pension value under UUK proposal 1"),
                       p("This proposal applies DB pension contributions at 1/85th of salary until pot reaches £40,000, at which point it changes to a DC pension where employees contribute 9.6% and employers contribute 10.2%.")
          )),
          fluidRow(valueBoxOutput("uuk1_pot", width=12)),
          fluidRow(valueBoxOutput("uuk1_pot_perc", width=12)),
          fluidRow(valueBoxOutput("uuk1_pot_diff", width=12))
-  ),
-  column(width=4,
-         fluidRow(box(title="UUK Proposal 2", width=12, collapsible = TRUE, collapsed = TRUE,
-                      p("This column shows the projected pension value under UUK proposal 2"),
-                      p("This proposal applies DB pension contributions at 1/75th of salary until pot reaches £30,000, at which point it changes to a DC pension where employees contribute 9.6% and employers contribute 10.2%.")
-         )),
-         fluidRow(valueBoxOutput("uuk2_pot", width=12)),
-         fluidRow(valueBoxOutput("uuk2_pot_perc", width=12)),
-         fluidRow(valueBoxOutput("uuk2_pot_diff", width=12))
   )			
 )
 }
@@ -365,28 +356,20 @@ model_2020c_uuk <- function()
 model_2020b_uuk <- function()
 {
   fluidRow(
-    column(width=4,
+    column(width=6,
            fluidRow(box(title="Current scheme", width=12, collapsible = TRUE, collapsed = TRUE,
                         p("This column shows the projected pension value under the current scheme"),
                         p("The current scheme uses a defined benefits scheme (DB) up to an income threshold of £59,883, and applies a defined contributions (DC) scheme to income above this threshold."))
            ),
            fluidRow(valueBoxOutput("current_income", width=12))
     ),
-    column(width=4,
-           fluidRow(box(title="UUK Proposal 1", width=12, collapsible = TRUE, collapsed = TRUE,
+    column(width=6,
+           fluidRow(box(title="UUK Proposal", width=12, collapsible = TRUE, collapsed = TRUE,
                         p("This column shows the projected pension value under UUK proposal 1"),
                         p("This proposal applies DB pension contributions at 1/85th of salary until pot reaches £40,000, at which point it changes to a DC pension where employees contribute 9.6% and employers contribute 10.2%.")
            )),
            fluidRow(valueBoxOutput("uuk1_income", width=12)),
            fluidRow(valueBoxOutput("uuk1_perc", width=12))
-    ),
-    column(width=4,
-           fluidRow(box(title="UUK Proposal 2", width=12, collapsible = TRUE, collapsed = TRUE,
-                        p("This column shows the projected pension value under UUK proposal 2"),
-                        p("This proposal applies DB pension contributions at 1/75th of salary until pot reaches £30,000, at which point it changes to a DC pension where employees contribute 9.6% and employers contribute 10.2%.")
-           )),
-           fluidRow(valueBoxOutput("uuk2_income", width=12)),
-           fluidRow(valueBoxOutput("uuk2_perc", width=12))
     )
   )
 }
@@ -672,6 +655,9 @@ about_tab <- function()
 changelog_tab <- function()
 {
 	tabItem(tabName="changelog",
+		fluidRow(box(width=12, title="3rd September 2021",
+			p("Removed UUK proposal 2, as UUK proposal 1 has now been pushed through the JNC")
+		)),
 		fluidRow(box(width=12, title="14th May 2021",
 			p("Added inflation assumptions, and replaced previous USS proposals with more recent UUK proposals")
 		)),
