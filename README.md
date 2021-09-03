@@ -55,6 +55,28 @@ cd USSpensions-shiny
 
 ## Kubernates deployment
 
+We need to build a docker image of the site, push it to hub.docker.com and then deploy it to Kubernetes
+
+Build:
+
+```
+docker build . -t explodecomputer/usspensions-shiny:<VERSION>
+```
+
+Push to docker hub. First login with docker hub credentials
+
+```
+docker login
+```
+
+Next push
+
+```
+docker push explodecomputer/usspensions-shiny:<VERSION>
+```
+
+Kubernetes deployment
+
 1. Setup `kubectl` on local machine
 2. `kubectl apply -f uss-pensions-shiny_deployment.yml`
 3. `kubectl apply -f uss-pensions-shiny_service.yml`
