@@ -59,10 +59,10 @@ inputs2020 <- function()
 				),
 				column(width=6,
 				       radioButtons("input_incr", "Inflation assumptions:", 
-				                    c("2.5% Cap, 1996-Present"="incr_sim_post96_2.5",
-				                      "5% Cap, 1996-Present"="incr_sim_post96_5",
-				                      "2.5% Cap, 1947-Present"="incr_sim_all_2.5",
-				                      "5% Cap, 1947-Present"="incr_sim_all_5"
+				                    c("2.5% Cap, 1947-Present"="incr_sim_all_2.5",
+				                      "5% Cap, 1947-Present"="incr_sim_all_5",
+				                      "2.5% Cap, 1996-Present"="incr_sim_post96_2.5",
+				                      "5% Cap, 1996-Present"="incr_sim_post96_5"
 				                      ))
 				)
 			)
