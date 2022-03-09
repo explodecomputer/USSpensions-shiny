@@ -563,27 +563,32 @@ fluidRow(
 
 dashboard2020_tab <- function()
 {
-	tabItem(tabName = "dashboard2020", fluidRow(
-		inputs2020(),
-		column(width=9,
-			fluidRow(
-				tabBox(width=12,
-				       tabPanel("UUK Proposals",
-				                model_2020_uuk()
-				       ),
-				      	# tabPanel("USS Proposals",
-				      	# 		model_2020_uss()
-				      	# ),
-					# tabPanel("Projections",
-					# 	model_2020()
-					# ),
-					tabPanel("Details",
-						model_2020_details()
+	tabItem(tabName = "dashboard2020", 
+		fluidRow(
+			tags$a(valueBox("ACT NOW!", "Please donate to the legal challenge against the USS directors. Together we can democratise our pension fund. Click here for more information.", icon=icon("heart"), color="black", width=12), href="https://www.crowdjustice.com/case/save-pensions-and-planet/")
+		),
+		fluidRow(
+			inputs2020(),
+			column(width=9,
+				fluidRow(
+					tabBox(width=12,
+					       tabPanel("UUK Proposals",
+					                model_2020_uuk()
+					       ),
+					      	# tabPanel("USS Proposals",
+					      	# 		model_2020_uss()
+					      	# ),
+						# tabPanel("Projections",
+						# 	model_2020()
+						# ),
+						tabPanel("Details",
+							model_2020_details()
+						)
 					)
 				)
 			)
 		)
-	))
+	)
 }
 
 
